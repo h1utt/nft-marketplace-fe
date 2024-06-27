@@ -1,0 +1,509 @@
+[
+  {
+    "type": "impl",
+    "name": "MarketplaceImpl",
+    "interface_name": "marketplace_contracts::marketplace::IMarketplace"
+  },
+  {
+    "type": "struct",
+    "name": "core::integer::u256",
+    "members": [
+      { "name": "low", "type": "core::integer::u128" },
+      { "name": "high", "type": "core::integer::u128" }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "marketplace_contracts::marketplace::Marketplace::RoyaltyInfo",
+    "members": [
+      { "name": "royalty_fee", "type": "core::integer::u256" },
+      { "name": "total_earned", "type": "core::integer::u256" },
+      {
+        "name": "royalty_receiver",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "marketplace_contracts::marketplace::Marketplace::Listing",
+    "members": [
+      { "name": "listing_counter", "type": "core::felt252" },
+      { "name": "token_id", "type": "core::felt252" },
+      { "name": "price", "type": "core::felt252" },
+      {
+        "name": "asset_contract",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "seller",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "marketplace_contracts::marketplace::Marketplace::Offer",
+    "members": [
+      { "name": "offer_counter", "type": "core::felt252" },
+      { "name": "token_id", "type": "core::felt252" },
+      { "name": "price", "type": "core::felt252" },
+      {
+        "name": "asset_contract",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "offeror",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "marketplace_contracts::marketplace::Marketplace::CollectionOffer",
+    "members": [
+      { "name": "collection_offer_counter", "type": "core::felt252" },
+      { "name": "quantity", "type": "core::felt252" },
+      { "name": "price", "type": "core::felt252" },
+      {
+        "name": "asset_contract",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "offeror",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "marketplace_contracts::marketplace::IMarketplace",
+    "items": [
+      {
+        "type": "function",
+        "name": "getMarketFeeEarned",
+        "inputs": [],
+        "outputs": [{ "type": "core::integer::u256" }],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getRoyaltyFeeEarned",
+        "inputs": [],
+        "outputs": [{ "type": "core::integer::u256" }],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getRoyaltyInfo",
+        "inputs": [
+          {
+            "name": "assetContract",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "marketplace_contracts::marketplace::Marketplace::RoyaltyInfo"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getMarketFee",
+        "inputs": [],
+        "outputs": [{ "type": "core::integer::u256" }],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getOwner",
+        "inputs": [],
+        "outputs": [
+          { "type": "core::starknet::contract_address::ContractAddress" }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getListingStatus",
+        "inputs": [{ "name": "messageHash", "type": "core::felt252" }],
+        "outputs": [{ "type": "core::felt252" }],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getOfferStatus",
+        "inputs": [{ "name": "messageHash", "type": "core::felt252" }],
+        "outputs": [{ "type": "core::felt252" }],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getCollectionOfferStatus",
+        "inputs": [{ "name": "messageHash", "type": "core::felt252" }],
+        "outputs": [{ "type": "core::felt252" }],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getCollectionOfferAcceptedQuantity",
+        "inputs": [{ "name": "messageHash", "type": "core::felt252" }],
+        "outputs": [{ "type": "core::integer::u128" }],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "cancelListing",
+        "inputs": [
+          {
+            "name": "listing",
+            "type": "marketplace_contracts::marketplace::Marketplace::Listing"
+          },
+          {
+            "name": "signature",
+            "type": "core::array::Array::<core::felt252>"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "buyFromListing",
+        "inputs": [
+          {
+            "name": "listing",
+            "type": "marketplace_contracts::marketplace::Marketplace::Listing"
+          },
+          {
+            "name": "signature",
+            "type": "core::array::Array::<core::felt252>"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "cancelOffer",
+        "inputs": [
+          {
+            "name": "offer",
+            "type": "marketplace_contracts::marketplace::Marketplace::Offer"
+          },
+          {
+            "name": "signature",
+            "type": "core::array::Array::<core::felt252>"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "acceptOffer",
+        "inputs": [
+          {
+            "name": "offer",
+            "type": "marketplace_contracts::marketplace::Marketplace::Offer"
+          },
+          {
+            "name": "signature",
+            "type": "core::array::Array::<core::felt252>"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "cancelCollectionOffer",
+        "inputs": [
+          {
+            "name": "collectionOffer",
+            "type": "marketplace_contracts::marketplace::Marketplace::CollectionOffer"
+          },
+          {
+            "name": "signature",
+            "type": "core::array::Array::<core::felt252>"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "acceptCollectionOffer",
+        "inputs": [
+          {
+            "name": "collectionOffer",
+            "type": "marketplace_contracts::marketplace::Marketplace::CollectionOffer"
+          },
+          {
+            "name": "signature",
+            "type": "core::array::Array::<core::felt252>"
+          },
+          { "name": "tokenId", "type": "core::felt252" }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "updateOwner",
+        "inputs": [
+          {
+            "name": "newOwner",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "updateMarketFee",
+        "inputs": [{ "name": "newFee", "type": "core::integer::u256" }],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "claimMarketFee",
+        "inputs": [{ "name": "amountToClaim", "type": "core::integer::u256" }],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "claimRoyaltyFee",
+        "inputs": [{ "name": "amountToClaim", "type": "core::integer::u256" }],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "setRoyaltyInfo",
+        "inputs": [
+          {
+            "name": "assetContract",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          { "name": "royaltyFee", "type": "core::integer::u256" },
+          {
+            "name": "royaltyReceiver",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "InternalImpl",
+    "interface_name": "marketplace_contracts::marketplace::IInternal"
+  },
+  {
+    "type": "interface",
+    "name": "marketplace_contracts::marketplace::IInternal",
+    "items": [
+      {
+        "type": "function",
+        "name": "upgrade",
+        "inputs": [
+          {
+            "name": "new_class_hash",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "type": "constructor",
+    "name": "constructor",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::EventListingCancelled",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "listing",
+        "type": "marketplace_contracts::marketplace::Marketplace::Listing",
+        "kind": "data"
+      },
+      { "name": "status", "type": "core::felt252", "kind": "data" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::EventListingBought",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "listing",
+        "type": "marketplace_contracts::marketplace::Marketplace::Listing",
+        "kind": "data"
+      },
+      {
+        "name": "buyer",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      { "name": "status", "type": "core::felt252", "kind": "data" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::EventOfferCancelled",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "offer",
+        "type": "marketplace_contracts::marketplace::Marketplace::Offer",
+        "kind": "data"
+      },
+      { "name": "status", "type": "core::felt252", "kind": "data" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::EventOfferAccepted",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "offer",
+        "type": "marketplace_contracts::marketplace::Marketplace::Offer",
+        "kind": "data"
+      },
+      {
+        "name": "seller",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      { "name": "status", "type": "core::felt252", "kind": "data" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::EventCollectionOfferCancelled",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "collection_offer",
+        "type": "marketplace_contracts::marketplace::Marketplace::CollectionOffer",
+        "kind": "data"
+      },
+      { "name": "status", "type": "core::felt252", "kind": "data" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::EventCollectionOfferCompleted",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "collection_offer",
+        "type": "marketplace_contracts::marketplace::Marketplace::CollectionOffer",
+        "kind": "data"
+      },
+      { "name": "status", "type": "core::felt252", "kind": "data" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::EventCollectionOfferAccepted",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "collection_offer",
+        "type": "marketplace_contracts::marketplace::Marketplace::CollectionOffer",
+        "kind": "data"
+      },
+      {
+        "name": "seller",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      { "name": "token_id", "type": "core::integer::u128", "kind": "data" },
+      {
+        "name": "amount_accepted",
+        "type": "core::integer::u128",
+        "kind": "data"
+      },
+      { "name": "status", "type": "core::felt252", "kind": "data" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::EventUpgraded",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "marketplace_contracts::marketplace::Marketplace::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "EventListingCancelled",
+        "type": "marketplace_contracts::marketplace::Marketplace::EventListingCancelled",
+        "kind": "nested"
+      },
+      {
+        "name": "EventListingBought",
+        "type": "marketplace_contracts::marketplace::Marketplace::EventListingBought",
+        "kind": "nested"
+      },
+      {
+        "name": "EventOfferCancelled",
+        "type": "marketplace_contracts::marketplace::Marketplace::EventOfferCancelled",
+        "kind": "nested"
+      },
+      {
+        "name": "EventOfferAccepted",
+        "type": "marketplace_contracts::marketplace::Marketplace::EventOfferAccepted",
+        "kind": "nested"
+      },
+      {
+        "name": "EventCollectionOfferCancelled",
+        "type": "marketplace_contracts::marketplace::Marketplace::EventCollectionOfferCancelled",
+        "kind": "nested"
+      },
+      {
+        "name": "EventCollectionOfferCompleted",
+        "type": "marketplace_contracts::marketplace::Marketplace::EventCollectionOfferCompleted",
+        "kind": "nested"
+      },
+      {
+        "name": "EventCollectionOfferAccepted",
+        "type": "marketplace_contracts::marketplace::Marketplace::EventCollectionOfferAccepted",
+        "kind": "nested"
+      },
+      {
+        "name": "EventUpgraded",
+        "type": "marketplace_contracts::marketplace::Marketplace::EventUpgraded",
+        "kind": "nested"
+      }
+    ]
+  }
+]
