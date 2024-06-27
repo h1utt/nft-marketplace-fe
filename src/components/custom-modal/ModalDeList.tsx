@@ -12,7 +12,6 @@ import { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { NumericFormat } from "react-number-format";
 import CustomModal from ".";
-import Sell from "../../contexts/abi/Sell.abi.json";
 import CustomImage from "../custom-image";
 import { delistNft } from "@/service/nft";
 
