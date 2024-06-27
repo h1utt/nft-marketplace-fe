@@ -61,20 +61,6 @@ const useProviderSigner = () => {
     return totalBalance?.totalBalance;
   };
 
-  const requestFaucet = async (address: any) => {
-    try {
-      const provider = new JsonRpcProvider(getNetWork());
-      await provider.requestStarknetFromFaucet(
-        "https://faucet.testnet.sui.io/gas",
-        address
-      );
-      toast.success("Success!");
-    } catch (ex) {
-      console.log(ex);
-      toast.error("Network request failed");
-    }
-  };
-
   const getObjectsOwnedByAddress = async (address: any) => {
     let results = [] as any[];
     try {
@@ -228,7 +214,6 @@ const useProviderSigner = () => {
     getObjectsOwnedByObject,
     getObject,
     currentWallet,
-    requestFaucet,
     getNFTinWallet,
     getNetWork,
     getAllCoins,
