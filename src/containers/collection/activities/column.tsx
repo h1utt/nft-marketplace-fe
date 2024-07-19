@@ -1,11 +1,10 @@
-import IconActivityAuction from "@/assets/icons/IconActivityAuction";
 import IconActivityListing from "@/assets/icons/IconActivityListing";
 import IconActivityMint from "@/assets/icons/IconActivityMint";
 import IconActivityOffer from "@/assets/icons/IconActivityOffer";
 import IconActivitySale from "@/assets/icons/IconActivitySale";
 import CustomImage from "@/components/custom-image";
 import { ACTIVITY_STATUS } from "@/constants";
-import { formatBalance, formatWallet } from "@/utils";
+import { formatBalance, formatAddress } from "@/utils";
 import moment from "moment";
 import Link from "next/link";
 
@@ -52,7 +51,7 @@ export const userActivityColumn = () => {
           href={`/user/${value}`}
           className="hover:text-current hover:underline"
         >
-          {formatWallet(value)}
+          {formatAddress(value)}
         </Link>
       ),
     },
@@ -68,7 +67,7 @@ export const userActivityColumn = () => {
               href={`/profile/${value}`}
               className="hover:text-current hover:underline"
             >
-              {formatWallet(value)}
+              {formatAddress(value)}
             </Link>
           );
       },
@@ -119,18 +118,6 @@ export const renderActivityStatus = (status: number) => {
       tagProperties.icon = <IconActivityOffer />;
       tagProperties.text = "Collection Offer";
       break;
-    case ACTIVITY_STATUS.AUCTION_START:
-      tagProperties.icon = <IconActivityAuction />;
-      tagProperties.text = "Auction Start";
-      break;
-    case ACTIVITY_STATUS.AUCTION_BID:
-      tagProperties.icon = <IconActivityAuction />;
-      tagProperties.text = "Auction Bid";
-      break;
-    case ACTIVITY_STATUS.AUCTION_SETTLE:
-      tagProperties.icon = <IconActivityAuction />;
-      tagProperties.text = "Auction Settle";
-      break;
     case ACTIVITY_STATUS.UPDATE:
       tagProperties.icon = <IconActivityListing />;
       tagProperties.text = "Edit Listing";
@@ -139,6 +126,9 @@ export const renderActivityStatus = (status: number) => {
       tagProperties.icon = <IconActivityOffer />;
       tagProperties.text = "Accept Offer";
       break;
+    case ACTIVITY_STATUS.ACCEPT_COLLECTION_OFFER:
+      tagProperties.icon = <IconActivityOffer />;
+      tagProperties.text = "Accept Collection Offer";
     default:
       break;
   }

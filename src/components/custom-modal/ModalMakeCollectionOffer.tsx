@@ -5,15 +5,15 @@ import IconVerified from "@/assets/icons/IconVerified";
 import Image from "next/image";
 import CustomInput from "../input";
 import CustomSelect from "../select";
-import { CHAIN_VALUES_ENUM, DURATION_OPTIONS } from "@/constants";
+import { DURATION_OPTIONS } from "@/constants";
 import {
-  formatBalance,
   formatBalanceByChain,
   getCurrencyByChain,
 } from "@/utils";
 import { toast } from "react-hot-toast";
 import useStarknet from "@/hooks/useStarknet";
 import { useApplicationContext } from "@/contexts/useApplication";
+import { Divider } from "antd";
 
 interface IModalMakeCollectionOffer {
   open: boolean;
@@ -33,7 +33,7 @@ const ModalMakeCollectionOffer = ({
   const { handleMakeCollectionOfferStarknet } = useStarknet();
 
   const getCurrency = useMemo(
-    () => getCurrencyByChain(collection?.networkType, collection?.tokenUnit),
+    () => getCurrencyByChain(5, 1),
     [collection]
   );
 
@@ -123,17 +123,16 @@ const ModalMakeCollectionOffer = ({
                   &nbsp;
                   {formatBalanceByChain(
                     collection?.floorPriceListing,
-                    collection?.networkType
+                    5
                   )}
                   &nbsp;
-                  {/* {getCurrency.currency} */}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div className="space-y-3 mt-5">
-          <p className="text-white text-lg font-medium">Other information</p>
+          <p className="text-white text-lg font-medium">Offer information</p>
           <div className="space-y-1">
             <label className="text-secondary text-xs mb-1">Price</label>
             <CustomInput
@@ -170,15 +169,14 @@ const ModalMakeCollectionOffer = ({
               }}
             />
           </div>
-          <div className="space-y-1">
-            <label className="text-secondary text-xs mb-1">Duration</label>
-            <CustomSelect
-              className="h-[62px]"
-              options={DURATION_OPTIONS}
-              value={date}
-              onChange={onChangeSort}
-            />
-          </div>
+          <Divider className="border-stroke" />
+        <div>
+          <p className="text-base text-white">Check your Wallet</p>
+          <p className="text-secondary mt-4">
+            You’ll be asked to check and confirm this transaction from your
+            wallet.
+          </p>
+        </div>
         </div>
       </div>
     </CustomModal>

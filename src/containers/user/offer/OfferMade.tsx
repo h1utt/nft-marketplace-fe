@@ -24,15 +24,17 @@ const OfferMade = () => {
   const [selectedNft, setSelectedNft] = useState<any>({});
 
   const onCancelOffer = (offer: any) => {
+    const nftTokenId = offer?.nftAddress?.split("_")[1];
     setSelectedNft({
       collectionAddress: offer?.collectionAddress,
       tokenUnit: offer?.tokenUnit,
-      networkType: offer?.networkType,
+      networkType: 5,
       title: offer?.nftTitle,
       imageUrl: offer?.nftImageUrl || offer?.collectionLogo,
       collectionName: offer?.collectionName,
       offerPrice: offer?.price,
       version: offer?.version,
+      tokenId: nftTokenId,
     });
     setOfferData({
       offerId: offer?.nonce,
@@ -49,10 +51,7 @@ const OfferMade = () => {
   return (
     <div className="space-y-4">
       {listOffer?.data.map((offer: any, index: number) => {
-        const getCurrency = getCurrencyByChain(
-          offer?.networkType,
-          offer?.tokenUnit
-        );
+        const getCurrency = getCurrencyByChain(5, 1);
         return (
           <div
             key={index}
@@ -97,10 +96,7 @@ const OfferMade = () => {
                         height={18}
                       />
                       <NumericFormat
-                        value={formatBalanceByChain(
-                          offer?.price,
-                          offer?.networkType
-                        )}
+                        value={formatBalanceByChain(offer?.price, 5)}
                         displayType="text"
                         decimalScale={2}
                         suffix={` ${getCurrency.currency}`}
@@ -108,11 +104,13 @@ const OfferMade = () => {
                     </div>
                   </div>
                   <div className="text-secondary">
-                    Quantity:{" "}
-                    <span className="text-white"> {offer?.quantity}</span>
+                    Quantity: <span className="text-white"> {1}</span>
                   </div>
                   <div className="text-secondary">
-                    {moment.unix(offer.blockTimestamp / 1000).fromNow()}
+                    Time:{" "}
+                    <span className="text-white">
+                      {moment.unix(offer.blockTimestamp / 1000).fromNow()}
+                    </span>
                   </div>
                 </div>
               </div>

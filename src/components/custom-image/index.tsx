@@ -8,7 +8,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 const CustomImage = ({
   src,
   className = "",
-  alt = "Tocen - NFT Marketplace",
+  alt = "NFT Marketplace",
   wrapperClassName,
   ...props
 }: LazyLoadImageProps) => {

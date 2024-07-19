@@ -1,20 +1,13 @@
-import IconGallery from "@/assets/icons/IconGallery";
-import IconGame from "@/assets/icons/IconGame";
-import IconGameplay from "@/assets/icons/IconGameplay";
 import IconHome from "@/assets/icons/IconHome";
 import IconMenuDisabled from "@/assets/icons/IconMenuDisabled";
-import IconQuest from "@/assets/icons/IconQuest";
 import IconRocket from "@/assets/icons/IconRocket";
 import { Divider } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import cx from "classnames";
-import { useVenom } from "@/contexts/useVenom";
-import { ADMIN } from "@/constants/market";
 
 const LeftSideMenu = () => {
-  const { account } = useVenom();
   const router = useRouter();
   let leftSideMenu = [
     {
@@ -26,16 +19,9 @@ const LeftSideMenu = () => {
       href: "/mint-nft",
       name: "Mint NFT",
       icon: <IconRocket active={router.pathname === "/mint-nft"} />,
-    },
-    {
-      href: "/create-collection",
-      name: "Create Collec",
-      icon: <IconQuest />,
-    },
+    }
   ];
-  const menuSide = !ADMIN.includes(account)
-    ? leftSideMenu.slice(0, 2)
-    : leftSideMenu;
+  const menuSide = leftSideMenu;
   return (
     <div className="sticky top-[164px] max-md:hidden group w-14 z-50">
       <div className="bg-layer-3 rounded-lg p-2 flex flex-col items-center absolute left-0 top-0 w-auto z-50">

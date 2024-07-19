@@ -1,10 +1,8 @@
 import IconVerified from "@/assets/icons/IconVerified";
 import Link from "next/link";
-import VenomToken from "../../../public/images/token/venom.png";
+import StrkToken from "../../../public/images/token/strk.png";
 import Image from "next/image";
 import Items_Countdown_timer from "../items_countdown_timer";
-import Bar from "@/containers/mint-nft/progressBar";
-import { NumericFormat } from "react-number-format";
 import CustomImage from "../custom-image";
 import { isDateGreater } from "@/utils";
 
@@ -53,25 +51,16 @@ const ItemMintNFT = ({ dataX }: IMintNFTCardProps) => {
               </div>
               <div className=" bg-layer-3 text-xs font-medium text-secondary rounded-lg text-center py-2 px-3">
                 <div className="flex justify-between">
-                  <div>Price:</div>
+                  <div>Price</div>
                   <div className="flex justify-center gap-1">
-                    <Image src={VenomToken} alt="Venom" className="w-4 h-4" />
+                    <Image src={StrkToken} alt="Strk" className="w-4 h-4" />
                     <div>{`${data?.pricePublic} STRK`}</div>
                   </div>
                 </div>
                 <div className="flex justify-between mt-1">
                   <div>Items</div>
                   <div>
-                    {Number(data?.itemCount) >= 10000000 ? (
-                      "∞"
-                    ) : (
-                      <NumericFormat
-                        value={data?.itemCount}
-                        displayType="text"
-                        thousandSeparator=","
-                        className="text-white"
-                      />
-                    )}
+                    {"∞"}
                   </div>
                 </div>
               </div>
@@ -79,24 +68,7 @@ const ItemMintNFT = ({ dataX }: IMintNFTCardProps) => {
           </div>
           {data?.collectionStatus == "Active" && (
             <>
-              {isDateGreater(new Date().getTime(), getStartTime(data)) && (
-                <div>
-                  <Bar data={data} />
-                  {data?.code != "devnetchicken" ? (
-                    <div className="flex items-center justify-evenly py-1 text-white">
-                      <span className="text-[12px]">End In:</span>
-                      <div className="w-[65%] text-[14px]">
-                        <Items_Countdown_timer
-                          className="!w-[200px]"
-                          time={Number(getEndTime(data)) - new Date().getTime()}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              )}
+              {isDateGreater(new Date().getTime(), getStartTime(data))}
               {isDateGreater(getStartTime(data), new Date().getTime()) && (
                 <div className="flex items-center justify-evenly py-1 text-white">
                   <span className="text-[12px]">Start In:</span>

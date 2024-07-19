@@ -2,7 +2,7 @@ import Image from "next/image";
 import React, { FC } from "react";
 import IconVerified from "@/assets/icons/IconVerified";
 import Link from "next/link";
-import VenomToken from "../../../public/images/token/venom.png";
+import StrkToken from "../../../public/images/token/strk.png";
 import CustomImage from "../custom-image";
 import moment from "moment";
 
@@ -53,8 +53,14 @@ const ItemLaunchpad: FC<IGameCardProps> = ({
               <div className="flex justify-between mt-1">
                 <div>Price</div>
                 <div className="flex justify-center gap-1 text-white">
-                  <Image src={VenomToken} alt="Venom" className="w-4 h-4" />
+                  <Image src={StrkToken} alt="Strk" className="w-4 h-4" />
                   <div>{`${price || 0}`} STRK</div>
+                </div>
+              </div>
+              <div className="flex justify-between mt-1">
+                <div>Items</div>
+                <div>
+                  {"∞"}
                 </div>
               </div>
             </div>

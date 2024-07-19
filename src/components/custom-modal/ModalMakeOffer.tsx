@@ -4,8 +4,7 @@ import CustomImage from "../custom-image";
 import IconVerified from "@/assets/icons/IconVerified";
 import Image from "next/image";
 import CustomInput from "../input";
-import CustomSelect from "../select";
-import { CHAIN_VALUES_ENUM, DURATION_OPTIONS } from "@/constants";
+import { DURATION_OPTIONS } from "@/constants";
 import {
   formatBalance,
   formatBalanceByChain,
@@ -14,6 +13,7 @@ import {
 import { toast } from "react-hot-toast";
 import useStarknet from "@/hooks/useStarknet";
 import FormatPrice from "../FormatPrice";
+import { Divider } from "antd";
 
 interface IModalMakeOffer {
   open: boolean;
@@ -28,8 +28,8 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
   const { handleMakeOfferStarknet } = useStarknet();
 
   const getCurrency = useMemo(
-    () => getCurrencyByChain(nft?.networkType, nft?.tokenUnit),
-    [nft?.networkType, nft?.tokenUnit]
+    () => getCurrencyByChain(5, 1),
+    [5, 1]
   );
 
   const onMakeOfferStarknet = async () => {
@@ -108,7 +108,7 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
                         number={Number(
                           formatBalanceByChain(
                             nft?.listingPrice,
-                            nft?.networkType
+                            5
                           )
                         )}
                       />
@@ -138,20 +138,19 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
                   {nft?.offerPrice ? (
                     <FormatPrice
                       number={Number(
-                        formatBalanceByChain(nft?.offerPrice, nft?.networkType)
+                        formatBalanceByChain(nft?.offerPrice, 5)
                       )}
                     />
                   ) : (
                     "--"
                   )}{" "}
-                  {/* {getCurrency.currency} */}
                 </span>
               </div>
             </div>
           </div>
         </div>
         <div className="space-y-5 mt-5">
-          <p className="text-white text-lg font-medium">Other information</p>
+          <p className="text-white text-lg font-medium">Offer information</p>
           <div className="space-x-4 flex items-center">
             <CustomInput
               placeholder="Price"
@@ -164,24 +163,15 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
                   setPrice(e.target.value);
               }}
             />
-            {/* <div className="rounded-lg bg-layer-3 flex-1 h-14 flex items-center justify-center">
-              <Image
-                src={getCurrency.image}
-                alt="token"
-                width={16}
-                height={16}
-              />
-              <span className="text-base text-secondary ml-1">
-                {getCurrency.currency}
-              </span>
-            </div> */}
           </div>
-          <CustomSelect
-            className="h-[62px]"
-            options={DURATION_OPTIONS}
-            value={date}
-            onChange={onChangeSort}
-          />
+        </div>
+        <Divider className="border-stroke" />
+        <div>
+          <p className="text-base text-white">Check your Wallet</p>
+          <p className="text-secondary mt-4">
+            You’ll be asked to check and confirm this transaction from your
+            wallet.
+          </p>
         </div>
       </div>
     </CustomModal>

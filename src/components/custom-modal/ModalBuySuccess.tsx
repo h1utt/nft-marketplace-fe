@@ -1,11 +1,10 @@
 import CustomModal from ".";
 import { useState } from "react";
-import { useVenom } from "@/contexts/useVenom";
-import useProviderSigner from "@/contexts/useProviderSigner";
 import CustomImage from "../custom-image";
 import { useRouter } from "next/router";
-import { formatWallet } from "@/utils";
+import { formatAddress } from "@/utils";
 import Link from "next/link";
+import { useAccount } from "@starknet-react/core";
 
 interface IModalBuySuccess {
   open: boolean;
@@ -14,7 +13,7 @@ interface IModalBuySuccess {
 }
 const ModalBuySuccess = ({ open, onCancel, nft }: IModalBuySuccess) => {
   const [loading, setLoading] = useState(false);
-  const { account } = useVenom();
+  const { account } = useAccount();
   const router = useRouter();
   const handleGotoProfile = () => {
     router.push(`/user/${account}?tab=items`);
@@ -56,7 +55,7 @@ const ModalBuySuccess = ({ open, onCancel, nft }: IModalBuySuccess) => {
                 href={`/nft/${nft?.nftId}`}
                 className="text-white text-base font-medium hover:text-primary"
               >
-                {formatWallet(nft?.nftId)}
+                {formatAddress(nft?.nftId)}
               </Link>
             </div>
           </div>

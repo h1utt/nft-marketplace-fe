@@ -7,7 +7,6 @@ import Image from "next/image";
 import { Divider } from "antd";
 import useStarknet from "@/hooks/useStarknet";
 import { toast } from "react-hot-toast";
-import { CHAIN_VALUES_ENUM } from "@/constants";
 import FormatPrice from "../FormatPrice";
 import { useProvider } from "@starknet-react/core";
 
@@ -32,7 +31,6 @@ const ModalCancelOffer = ({
     try {
       setLoading(true);
       let res: any;
-      console.log(offerData);
       if (offerData?.quantity) {
         res = await handleCancelCollectionOfferStarknet({
           collectionOfferId: offerData?.offerId,
@@ -42,7 +40,9 @@ const ModalCancelOffer = ({
           signatureR: offerData?.signatureR,
           signatureS: offerData?.signatureS,
         });
-      } else res = await handleCancelOfferStarknet({ ...nft, ...offerData });
+      } else {
+        res = await handleCancelOfferStarknet({ ...nft, ...offerData });
+      }
       if (res.transaction_hash) {
         await provider.waitForTransaction(res?.transaction_hash);
         setLoading(false);
@@ -61,8 +61,8 @@ const ModalCancelOffer = ({
   };
 
   const getCurrency = useMemo(
-    () => getCurrencyByChain(nft?.networkType, nft?.tokenUnit),
-    [nft?.networkType, nft?.tokenUnit]
+    () => getCurrencyByChain(5, 1),
+    [5, 1]
   );
   return (
     <CustomModal
@@ -110,7 +110,7 @@ const ModalCancelOffer = ({
                 {nft?.offerPrice ? (
                   <FormatPrice
                     number={Number(
-                      formatBalanceByChain(offerData.price, nft?.networkType)
+                      formatBalanceByChain(offerData.price, 5)
                     )}
                   />
                 ) : (
@@ -119,20 +119,12 @@ const ModalCancelOffer = ({
               </span>
             </div>
           </div>
-          {offerData?.quantity && (
-            <div className="flex items-center justify-between mt-1">
-              <span className="text-lg text-secondary">Quantity</span>
-              <div className="text-white font-medium text-base">
-                {offerData?.quantity}
-              </div>
-            </div>
-          )}
         </div>
         <Divider className="border-stroke" />
         <div>
           <p className="text-base text-white">Check your Wallet</p>
           <p className="text-secondary mt-4">
-            You’ll be asked to check and confirm this cancelation from your
+            You’ll be asked to check and confirm this transaction from your
             wallet.
           </p>
         </div>

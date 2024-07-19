@@ -1,12 +1,7 @@
-import IconCart from "@/assets/icons/IconCart";
-import IconRemoveCart from "@/assets/icons/IconRemoveCart";
 import ModalBuyNft from "@/components/custom-modal/ModalBuyNft";
 import ModalListNft from "@/components/custom-modal/ModalListNft";
 import {
-  CHAIN_VALUES_ENUM,
   GRID_MODE,
-  REFUNDABLE_FEE,
-  TOP_RANK,
 } from "@/constants";
 import { useApplicationContext } from "@/contexts/useApplication";
 import { useVenom } from "@/contexts/useVenom";
@@ -14,7 +9,6 @@ import useShowModal from "@/hooks/useShowModal";
 import useStarknet from "@/hooks/useStarknet";
 import { formatBalanceByChain, getCurrencyByChain } from "@/utils";
 import { Button, Tooltip } from "antd";
-import { Address } from "everscale-inpage-provider";
 import Image from "next/image";
 import { useMemo } from "react";
 import { toast } from "react-hot-toast";
@@ -28,36 +22,17 @@ import Link from "next/link";
 
 const ProductCardPro = (props: any) => {
   const {
-    collectionName,
     nftId,
     title,
     imageUrl,
     listingPrice,
     ownerAddress,
     isListing,
-    collectionAddress,
-    ranking,
-    top = 0,
-    isOnBulkAction,
-    onSelectNft,
-    selectedNft,
-    disabledCheckbox,
     offerPrice,
-    id,
-    managerNft,
     gridMode,
-    networkType,
-    version,
-    onClick,
-    tokenUnit,
-    signatureR,
-    signatureS,
   } = props;
   const { provider } = useVenom();
   const {
-    addItem,
-    items,
-    removeItem,
     isAuthenticated,
     currentConnectedAccount,
     onShowDrawerConnectWallet,
@@ -65,8 +40,8 @@ const ProductCardPro = (props: any) => {
   const { handleBuyFromListingStarknet } = useStarknet();
 
   const getCurrency = useMemo(
-    () => getCurrencyByChain(networkType, tokenUnit),
-    [networkType, tokenUnit]
+    () => getCurrencyByChain(5, 1),
+    [5, 1]
   );
 
   const renderPrice = () => {
@@ -84,9 +59,8 @@ const ProductCardPro = (props: any) => {
           <Image src={getCurrency.image} alt="Venom" width={12} height={12} />
           <span className="text-white text-xs font-medium">
             <FormatPrice
-              number={Number(formatBalanceByChain(listingPrice, networkType))}
+              number={Number(formatBalanceByChain(listingPrice, 5))}
             />{" "}
-            {/* {getCurrency.currency} */}
           </span>
         </div>
       </div>
@@ -143,42 +117,16 @@ const ProductCardPro = (props: any) => {
   const onClickBuy = (e: any) => {
     e.stopPropagation();
     if (!isAuthenticated) return onShowDrawerConnectWallet();
-    onShowModalBuyNft();
   };
 
   const onConfirmBuy = async () => {
     await onBuyNftStarknet();
   };
 
-  const isAddedToCart = !!items?.find((item) => item.id === nftId);
-
-  const onAddToCart = (e: any) => {
-    e.stopPropagation();
-    const params = {
-      id: nftId,
-      collectionAddress,
-      collectionName,
-      imageUrl,
-      listingPrice,
-      title,
-      networkType,
-      signatureR,
-      signatureS,
-      tokenUnit,
-    };
-    addItem(params);
-  };
-
-  const onRemoveFromCart = (e: any) => {
-    e.stopPropagation();
-    removeItem({ id: nftId });
-  };
-
   return (
     <div>
       <Link href={`/nft/${nftId}`}>
         <div
-          // onClick={onClick}
           className="bg-layer-2 cursor-pointer border border-solid rounded-lg p-2 border-stroke group"
         >
           <div className="flex flex-col space-y-2">
@@ -197,12 +145,6 @@ const ProductCardPro = (props: any) => {
                   {currentConnectedAccount !== ownerAddress ? (
                     <div className="items-center space-x-2 w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
                       <Button
-                        className="btn-secondary w-12 px-0"
-                        onClick={isAddedToCart ? onRemoveFromCart : onAddToCart}
-                      >
-                        {isAddedToCart ? <IconRemoveCart /> : <IconCart />}
-                      </Button>
-                      <Button
                         onClick={onClickBuy}
                         className="btn-primary flex-1"
                       >
@@ -214,7 +156,6 @@ const ProductCardPro = (props: any) => {
                       <Button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onShowModalCancelNFT();
                         }}
                         className="btn-primary flex-1"
                       >
@@ -230,7 +171,6 @@ const ProductCardPro = (props: any) => {
                       <Button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onShowModalMakeOffer();
                         }}
                         className="btn-primary flex-1"
                       >
@@ -242,7 +182,6 @@ const ProductCardPro = (props: any) => {
                       <Button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onShowModalListNft();
                         }}
                         className="btn-primary flex-1"
                       >
@@ -280,7 +219,7 @@ const ProductCardPro = (props: any) => {
                         <span className="text-white text-xs font-medium">
                           <FormatPrice
                             number={Number(
-                              formatBalanceByChain(offerPrice, networkType)
+                              formatBalanceByChain(offerPrice, 5)
                             )}
                           />{" "}
                           {/* {getCurrency.currency} */}

@@ -135,49 +135,21 @@ const Ranking = () => {
       ),
     },
     {
-      title: <div className="text-secondary">Floor Price</div>,
-      // dataIndex: "floorPriceListing",
-      // key: "floorPriceListing",
-      dataIndex:
-        categoryName == "all" ? "floorPrice" : `floorPrice${categoryName}`,
-      key: categoryName == "all" ? "floorPrice" : `floorPrice${categoryName}`,
+      title: <div className="text-secondary">Sales</div>,
+      dataIndex: "sales",
+      key: "sales",
       width: 200,
       render: (value: any) => (
         <div className="flex gap-1">
-          <span className="text-white">{formatBalance(value)}</span>
-          <div className="text-secondary">STRK</div>
-        </div>
-      ),
-      sorter: true,
-    },
-    {
-      title: "Floor Change",
-      dataIndex:
-        categoryName == "all"
-          ? "percentageFloor1d"
-          : `percentageFloor${categoryName}`,
-      key:
-        categoryName == "all"
-          ? "percentageFloor1d"
-          : `percentageFloor${categoryName}`,
-      width: 150,
-      render: (value: any) => (
-        <div className="flex items-center">
-          <span
-            className={Number(value) < 0 ? "text-[#E94949]" : "text-[#00C089]"}
-          >{`${value || "--"}%`}</span>
-          {Number(value) < 0 ? <IconDowntrend /> : <IconUptrend />}
+          <span className="text-white">{Number(value) || 0}</span>
         </div>
       ),
       sorter: true,
     },
     {
       title: "Volume",
-      dataIndex:
-        categoryName == "all" ? "totalVolume" : `volume${categoryName}`,
-      key: categoryName == "all" ? "totalVolume" : `volume${categoryName}`,
-      // dataIndex: `totalVolume`,
-      // key: `totalVolume`,
+      dataIndex: "volume",
+      key: "volume",
       width: 200,
       render: (value: any) => (
         <div className="flex gap-1">
@@ -200,26 +172,8 @@ const Ranking = () => {
       width: 150,
       render: (value: any) => (
         <div className="flex items-center">
-          <span
-            className={Number(value) < 0 ? "text-[#E94949]" : "text-[#00C089]"}
-          >{`${value || "--"}%`}</span>
-          {Number(value) < 0 ? <IconDowntrend /> : <IconUptrend />}
+          {<IconUptrend />}
         </div>
-      ),
-      sorter: true,
-    },
-    {
-      title: "Owners",
-      dataIndex: "owners",
-      key: "owners",
-      width: 150,
-      render: (value: any) => (
-        <NumericFormat
-          value={Number(value)}
-          displayType="text"
-          thousandSeparator=","
-          className="text-white"
-        />
       ),
       sorter: true,
     },
@@ -276,7 +230,7 @@ const Ranking = () => {
             Ranking
           </div>
           <div className="heading text-[20px] text-secondary font-normal mb-10">
-            Discover NFT collections, ranked by Volume and Sales.
+            Discover NFT collections, their Volume and Sales.
           </div>
         </div>
       )}

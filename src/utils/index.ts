@@ -1,8 +1,8 @@
 import { CHAIN_VALUES, CHAIN_VALUES_ENUM, STARKNET_OFFSET } from "@/constants";
-import STRKToken from "../../public/images/token/venom.png";
+import StrkToken from "../../public/images/token/strk.png";
 import BigNumber from "bignumber.js";
 
-export const formatWallet = (address: any) => {
+export const formatAddress = (address: any) => {
   if (!address) return "";
   return `${address?.slice(0, 6)}...${address?.slice(-4)}`;
 };
@@ -69,8 +69,6 @@ export const openWindowTab = ({ url, title, w, h }: any) => {
     left=${left}
     `
   );
-
-  //if (window.focus) newWindow.focus();
 };
 
 export const getCurrencyByChain = (
@@ -78,7 +76,7 @@ export const getCurrencyByChain = (
   unitType: any = "1"
 ) => {
   return {
-    image: STRKToken,
+    image: StrkToken,
     currency: "STRK",
   };
 };
@@ -146,12 +144,5 @@ export const formatBalanceByChain = (
   chain: CHAIN_VALUES | CHAIN_VALUES_ENUM,
 ) => {
   if (!amount) return 0;
-  if (
-    chain === CHAIN_VALUES.STARKNET ||
-    chain === CHAIN_VALUES_ENUM.STARKNET ||
-    chain === CHAIN_VALUES.MINT ||
-    chain === CHAIN_VALUES_ENUM.MINT
-  ) {
-    return new BigNumber(amount).dividedBy(STARKNET_OFFSET).toNumber();
-  }
+  return new BigNumber(amount).dividedBy(STARKNET_OFFSET).toNumber();
 };

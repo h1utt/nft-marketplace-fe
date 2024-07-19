@@ -1,10 +1,9 @@
 import CustomTable from "@/components/table";
 import React, { useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
 import { useNftDetailContext } from "./context";
 import {
   formatBalanceByChain,
-  formatWallet,
+  formatAddress,
   getCurrencyByChain,
 } from "@/utils";
 import moment from "moment";
@@ -78,15 +77,10 @@ const OfferTab = () => {
       dataIndex: "price",
       key: "price",
       render: (value: any, record: any) => {
-        const getCurrency = getCurrencyByChain(
-          record?.networkType,
-          record?.tokenUnit
-        );
+        const getCurrency = getCurrencyByChain(5, 1);
         return (
           <p className="font-medium flex gap-2">
-            <FormatPrice
-              number={Number(formatBalanceByChain(value, record?.networkType))}
-            />{" "}
+            <FormatPrice number={Number(formatBalanceByChain(value, 5))} />{" "}
             <span className="text-secondary">{getCurrency.currency}</span>
           </p>
         );
@@ -105,7 +99,7 @@ const OfferTab = () => {
       dataIndex: "userAddress",
       key: "userAddress",
       render: (value: any) => (
-        <span className="text-primary font-medium">{formatWallet(value)}</span>
+        <span className="text-primary font-medium">{formatAddress(value)}</span>
       ),
     },
     {

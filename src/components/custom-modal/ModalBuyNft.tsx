@@ -4,13 +4,13 @@ import IconVerified from "@/assets/icons/IconVerified";
 import { REFUNDABLE_FEE } from "@/constants";
 import { useVenom } from "@/contexts/useVenom";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
-import { formatBalance, formatWallet } from "@/utils";
+import { formatBalance, formatAddress } from "@/utils";
 import { Tooltip } from "antd";
 import Image from "next/image";
 import CustomModal from ".";
-import VenomToken from "../../../public/images/token/venom.png";
-import Venom from "../../../public/images/venom.png";
+import StrkToken from "../../../public/images/token/strk.png";
 import CustomImage from "../custom-image";
+import { Divider } from "antd";
 
 interface IModalBuyNft {
   open: boolean;
@@ -52,44 +52,10 @@ const ModalBuyNft = ({ open, onCancel, nft, handleBuy }: IModalBuyNft) => {
             </div>
           </div>
           <div className="space-x-1 flex items-center">
-            <Image src={VenomToken} alt="token" width={14} height={14} />
+            <Image src={StrkToken} alt="token" width={14} height={14} />
             <span className="text-sm ">
               {formatBalance(nft?.listingPrice)} STRK
             </span>
-          </div>
-        </div>
-        <div className="border-b border-solid border-stroke pb-5">
-          <div className="mt-5">
-            <p className="text-secondary text-base">Your wallet:</p>
-            <div className="bg-layer-2 rounded-lg p-4 flex items-center space-x-2 mt-5">
-              {/* <Image src={Venom} alt="Venom" /> */}
-              <div className="text-lg">
-                <span className="text-secondary">Starknet</span>
-                <div className="text-white flex items-center font-medium space-x-2">
-                  <span>{formatWallet(account)}</span>
-                  <Tooltip title="Copied" placement="right" trigger={["click"]}>
-                    <IconCopy
-                      className="cursor-pointer"
-                      onClick={copy as any}
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between text-white mt-4">
-            <div className="flex items-center space-x-1">
-              <span className="text-secondary text-base">Refundable fee</span>
-              <Tooltip title="Maximum fee amount is specified by dApp being required to pay for the logic executable smart contracts chain. Most commonly this fee will be partially refunded on a user's wallet.">
-                <IconInfo />
-              </Tooltip>
-            </div>
-            <div className="space-x-1 flex items-center font-medium text-base">
-              <Image src={VenomToken} alt="token" width={14} height={14} />
-              <span className="text-sm ">
-                {formatBalance(REFUNDABLE_FEE)} STRK
-              </span>
-            </div>
           </div>
         </div>
         {Number(balance * 10 ** 9) <= Number(estimatedFund) ? (
@@ -98,13 +64,21 @@ const ModalBuyNft = ({ open, onCancel, nft, handleBuy }: IModalBuyNft) => {
           <div className="flex items-center justify-between text-white mt-4">
             <span>You will pay</span>
             <div className="space-x-1 flex items-center font-medium text-base">
-              <Image src={VenomToken} alt="token" width={14} height={14} />
+              <Image src={StrkToken} alt="token" width={14} height={14} />
               <span className="text-sm ">
                 {formatBalance(estimatedFund)} STRK
               </span>
             </div>
           </div>
         )}
+        <Divider className="border-stroke" />
+        <div>
+          <p className="text-base text-white">Check your Wallet</p>
+          <p className="text-secondary mt-4">
+            You’ll be asked to check and confirm this transaction from your
+            wallet.
+          </p>
+        </div>
       </div>
     </CustomModal>
   );

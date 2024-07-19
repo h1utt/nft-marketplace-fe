@@ -1,0 +1,68 @@
+{
+    "id": 15,
+    "attributes": {
+        "name": "DEV3",
+        "description": "This is DEV3 NFT Collection.",
+        "collectionCategory": "LaunchpadDrops",
+        "collectionStatus": "Active",
+        "isFeatured": true,
+        "code": "collection_2",
+        "publicStartTime": "2024-01-26T15:00:00.000Z",
+        "publicEndTime": "2024-10-27T15:00:00.000Z",
+        "mintPoolName": "Private Mint",
+        "listingStartTime": "2024-01-27T15:00:00.000Z",
+        "royaltyPercentage": 5,
+        "SC_collection": "0x0411257128dfbd231d9fdf1ee3cb816691adf8b51d33b3ff4f5948748cd70f6b",
+        "mintPoolHolderName": "Key Holder Mint",
+        "mintPoolWhitelistName": "Whitelist Mint",
+        "mintPoolPublicName": "Public Mint",
+        "createdAt": "2024-01-24T03:18:03.416Z",
+        "updatedAt": "2024-02-22T08:56:23.285Z",
+        "publishedAt": "2024-01-24T03:18:06.992Z",
+        "maxPublicMint": "333",
+        "publicAccountLimit": "120",
+        "pricePublic": 0,
+        "chainNetwork": "starknet",
+        "logo": {
+            "data": {
+                "id": 5,
+                "attributes": {
+                    "name": "NFT.gif",
+                    "width": 1000,
+                    "height": 1000,
+                    "hash": "NFT_2942601d56",
+                    "ext": ".gif",
+                    "mime": "image/gif",
+                    "size": 2079.51,
+                    "url": "https://grow-api.memeland.com/token/images/2.gif",
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "createdAt": "2024-01-24T07:45:03.877Z",
+                    "updatedAt": "2024-01-24T07:45:03.877Z"
+                }
+            }
+        },
+        "featuredImage": {
+            "data": {
+                "id": 5,
+                "attributes": {
+                    "name": "NFT.gif",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1000,
+                    "height": 1000,
+                    "formats": null,
+                    "hash": "NFT_2942601d56",
+                    "ext": ".gif",
+                    "mime": "image/gif",
+                    "size": 2079.51,
+                    "url": "https://grow-api.memeland.com/token/images/2.gif",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-01-24T07:45:03.877Z",
+                    "updatedAt": "2024-01-24T07:45:03.877Z"
+                }
+            }
+        }
+    }
+}

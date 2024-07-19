@@ -40,21 +40,6 @@ const Items = () => {
     loadingNft,
   } = useCollectionDetailContext();
 
-  const TOP_RARITY = [
-    {
-      label: "Top 1%",
-      value: Math.floor(collectionDetail?.total_items / 100),
-    },
-    {
-      label: "Top 10%",
-      value: Math.floor(collectionDetail?.total_items / 10),
-    },
-    {
-      label: "Top 25%",
-      value: Math.floor(collectionDetail?.total_items / 4),
-    },
-  ];
-
   useEffect(() => {
     if (!isMobileOnly) toggleFilter();
   }, []);
@@ -167,30 +152,6 @@ const Items = () => {
                   >
                     {options.name}
                   </button>
-                ))}
-              </div>
-            </Panel>
-            <Panel
-              header={
-                <span className="text-white text-[18px] font-semibold lead-[26px]">
-                  Rarity
-                </span>
-              }
-              className="filter-header"
-              key={2}
-            >
-              <div className="flex items-center space-x-2 flex-wrap">
-                {TOP_RARITY.map((rarity, index) => (
-                  <Button
-                    className={cx("btn-secondary px-[10px] mb-2", {
-                      "bg-layer-focus":
-                        Number(paramsSearch.maxRank) === rarity.value,
-                    })}
-                    key={index}
-                    onClick={() => onSetRankRange(rarity.value)}
-                  >
-                    {rarity.label}
-                  </Button>
                 ))}
               </div>
             </Panel>
@@ -329,9 +290,6 @@ const Items = () => {
             className="h-12 max-lg:w-full"
             onChange={onChangeSearchText}
           />
-          {/* <Button className="btn-secondary text-base hidden lg:block">
-            Sweep
-          </Button> */}
           <CustomSelect
             options={SORT_OPTIONS}
             value={paramsSearch.orderBy}
@@ -365,9 +323,6 @@ const Items = () => {
               />
             </div>
           </div>
-          {/* <Button className="btn-secondary text-base lg:hidden px-11 py-3">
-            Sweep
-          </Button> */}
         </div>
       </div>
       <div className="grid grid-cols-12 gap-x-4">

@@ -1,20 +1,10 @@
-import IconPricetag from "@/assets/icons/IconPricetag";
 import IconVerified from "@/assets/icons/IconVerified";
 import {
-  CHAIN_VALUES_ENUM,
   STARKNET_OFFSET,
   STARKNET_STRK_MARKET_CONTRACT_NEW
 } from "@/constants";
-import {
-  contractMarket,
-} from "@/constants/market";
-import { useApplicationContext } from "@/contexts/useApplication";
-import useProviderSigner from "@/contexts/useProviderSigner";
-import { useVenom } from "@/contexts/useVenom";
-import { delay } from "@/helper/delay";
 import useStarknet from "@/hooks/useStarknet";
 import { formatBalanceByChain, getCurrencyByChain } from "@/utils";
-import { Address } from "everscale-inpage-provider";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -23,11 +13,11 @@ import CustomModal from ".";
 import CustomImage from "../custom-image";
 import CustomInput from "../input";
 import BigNumber from "bignumber.js";
-import CustomSelect from "../select";
-import StrkToken from "public/images/token/venom.png";
+import StrkToken from "public/images/token/strk.png";
 import { getNonce, listNFTStarknet } from "@/service/nft";
 import { useAccount, useContract } from "@starknet-react/core";
 import MarketStarknetAbi from "@/contexts/abi/MarketStarknet.abi.json";
+import { Divider } from "antd";
 
 interface IModalListNft {
   open: boolean;
@@ -48,24 +38,16 @@ const PAYMENT_OPTIONS = [
 ];
 
 const ModalListNft = ({ open, onCancel, nft }: IModalListNft) => {
-  const { provider } = useVenom();
-  const { currentConnectedAccount, isVentorianHolder } =
-    useApplicationContext();
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState<any>("");
   const [loadingCheckApprove, setLoadingCheckApprove] = useState<any>(false);
   const [loadingList, setLoadingList] = useState<any>(false);
   const router = useRouter();
   const { checkApprovedCollection, handleSignListing } = useStarknet();
-  const [paymentUnit, setPaymentUnit] = useState(0);
-
-  useEffect(() => {
-    setPaymentUnit(nft?.tokenUnit || 0);
-  }, [nft?.tokenUnit]);
 
   const getCurrency = useMemo(
-    () => getCurrencyByChain(nft?.networkType, paymentUnit),
-    [nft?.networkType, paymentUnit]
+    () => getCurrencyByChain(5, 1),
+    [5, 1]
   );
 
   const { contract: marketSTRKContractNew } = useContract({
@@ -88,11 +70,11 @@ const ModalListNft = ({ open, onCancel, nft }: IModalListNft) => {
       data?.price
     );
     const dataList = {
-      nftId: data?.id, // id bản ghi
+      nftId: data?.id,
       price: new BigNumber(data?.price)
         .multipliedBy(STARKNET_OFFSET)
         .toString(),
-      listingCounter: nonce?.data, // nonce
+      listingCounter: nonce?.data,
       messageHash: msgHash,
       signatureR: signatureR,
       signatureS: signatureS,
@@ -108,7 +90,6 @@ const ModalListNft = ({ open, onCancel, nft }: IModalListNft) => {
         return toast.error("This collection is not verified!");
       setLoading(true);
       console.log(price);
-      console.log(paymentUnit);
       const res = await handleListNftStarknet({
         ...nft,
         price: price,
@@ -173,7 +154,7 @@ const ModalListNft = ({ open, onCancel, nft }: IModalListNft) => {
                 height={14}
               />
               <span className="text-sm ">{`${
-                formatBalanceByChain(nft?.listingPrice, nft?.networkType) || 0
+                formatBalanceByChain(nft?.listingPrice, 5) || 0
               } `}</span>
             </div>
           )}
@@ -185,7 +166,7 @@ const ModalListNft = ({ open, onCancel, nft }: IModalListNft) => {
           <div className="space-x-1 flex items-center">
             <Image src={getCurrency.image} alt="token" width={14} height={14} />
             <span className="text-sm ">{`${
-              formatBalanceByChain(nft?.floorPriceListing, nft?.networkType) ||
+              formatBalanceByChain(nft?.floorPriceListing, 5) ||
               "--"
             }`}</span>
           </div>
@@ -201,48 +182,30 @@ const ModalListNft = ({ open, onCancel, nft }: IModalListNft) => {
                 setPrice(e.target.value);
             }}
           />
-          <CustomSelect
-            options={PAYMENT_OPTIONS}
-            value={paymentUnit}
-            disabled
-            // onChange={setPaymentContract}
-            className="h-14 w-48"
-          />
         </div>
       </div>
       <div className="text-white mt-5">
         <p className="text-lg font-medium">Fee</p>
         <div className="flex items-center justify-between mt-5">
           <span className="text-secondary text-base">
-            Creator Royalties (5%)
+            Platform (2%)
           </span>
           <div className="space-x-1 flex items-center">
             <Image src={getCurrency.image} alt="token" width={14} height={14} />
             <span className="text-sm ">{`${new BigNumber(price || 0)
-              .multipliedBy(0.05)
-              .toString()} ${getCurrency.currency}`}</span>
-          </div>
-        </div>
-        <div className="flex items-center justify-between mt-4">
-          <div className="text-secondary text-base flex items-center">
-            Platform&nbsp;
-            {isVentorianHolder ? (
-              <div>
-                <span className="line-through">(1.5%)</span>&nbsp;
-                <span className="text-primary">(0%)</span>
-              </div>
-            ) : (
-              <span>(1.5%)</span>
-            )}
-          </div>
-          <div className="space-x-1 flex items-center">
-            <Image src={getCurrency.image} alt="token" width={14} height={14} />
-            <span className="text-sm ">{`${new BigNumber(price || 0)
-              .multipliedBy(0.015)
+              .multipliedBy(0.02)
               .toString()} ${getCurrency.currency}`}</span>
           </div>
         </div>
       </div>
+      <Divider className="border-stroke" />
+        <div>
+          <p className="text-base text-white">Check your Wallet</p>
+          <p className="text-secondary mt-4">
+            You’ll be asked to check and confirm this transaction from your
+            wallet.
+          </p>
+        </div>
     </CustomModal>
   );
 };

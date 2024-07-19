@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Logo from "../../../public/images/logo/logo_footer.png";
+import Logo from "../../../public/images/logo/logo_final.png";
 import IconDiscord from "@/assets/icons/IconDiscord";
 import IconMedium from "@/assets/icons/IconMedium";
 import IconTelegram from "@/assets/icons/IconTeleram";
@@ -40,48 +40,24 @@ function Footer() {
               <h6 className="font-bold text-lg text-white mb-2">Products</h6>
               <ul className="flex flex-col items-start space-y-2">
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     Launchpad
                   </div>
-                  {/* </Link> */}
                 </li>
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     Marketplace
                   </div>
-                  {/* </Link> */}
                 </li>
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     GameFi
                   </div>
-                  {/* </Link> */}
                 </li>
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     DeFi
                   </div>
-                  {/* </Link> */}
                 </li>
               </ul>
             </div>
@@ -89,37 +65,19 @@ function Footer() {
               <h6 className="font-bold text-lg text-white mb-2">Support</h6>
               <ul className="flex flex-col items-start space-y-2">
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     Contact us
                   </div>
-                  {/* </Link> */}
                 </li>
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     Terms & Conditions
                   </div>
-                  {/* </Link> */}
                 </li>
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     Privacy
                   </div>
-                  {/* </Link> */}
                 </li>
               </ul>
             </div>
@@ -127,37 +85,19 @@ function Footer() {
               <h6 className="font-bold text-lg text-white mb-2">About</h6>
               <ul className="flex flex-col items-start space-y-2">
                 <li>
-                  {/* <Link
-                    href="https://tocen.gitbook.io/tocen-launchpad/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     Document
                   </div>
-                  {/* </Link> */}
                 </li>
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     Help
                   </div>
-                  {/* </Link> */}
                 </li>
                 <li>
-                  {/* <Link
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
                   <div className="hover:text-white text-grey cursor-pointer">
                     FAQs
                   </div>
-                  {/* </Link> */}
                 </li>
               </ul>
             </div>
@@ -169,17 +109,16 @@ function Footer() {
                 id="logo_footer"
                 className="logo-dark"
                 src={Logo}
-                alt="Gamehub"
+                alt="marketplace"
               />
             </div>
             <p className="lead-6 text-grey max-w-[28rem] 2md:text-right">
-              HieuTT community brings only the best and brightest projects to
-              the Starknet ecosystem.
+              Starknet NFT Marketplace
             </p>
             <ul className="mb-[15px] flex items-center space-x-4">
               <li>
                 <Link
-                  href="https://twitter.com/HieuTT_gg"
+                  href="/"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -188,7 +127,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="https://discord.com/invite/fskwRB7mDt"
+                  href="/"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -197,7 +136,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="https://linktr.ee/ventory"
+                  href="/"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -206,7 +145,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="https://t.me/ventorychannel"
+                  href="/"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -214,7 +153,6 @@ function Footer() {
                 </Link>
               </li>
             </ul>
-            {/* <p className="text-grey text-xs">© 2023 Tocen</p> */}
           </div>
         </div>
       </div>

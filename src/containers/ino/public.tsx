@@ -1,17 +1,13 @@
-import Bar from "./progressBar";
 import Items_Countdown_timer from "../../components/items_countdown_timer";
 import { Button } from "antd";
-import { NumericFormat } from "react-number-format";
 import { useContexts } from "./context";
 import { getCurrencyByChain, isDateGreater } from "@/utils";
 import EvenEnd from "./eventEnd";
 import Image from "next/image";
 import useFunctionIDO from "./functionINO";
 import { useApplicationContext } from "@/contexts/useApplication";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import FormatPrice from "@/components/FormatPrice";
-import toast from "react-hot-toast";
-import { CHAIN_VALUES } from "@/constants";
 
 const Mintlist = () => {
   const {
@@ -26,10 +22,6 @@ const Mintlist = () => {
     accNftData,
     mintedByPool,
     nftDataPoolSV,
-    discordVerify,
-    twitterVerifyPN,
-    retweetVerify,
-    ventoryVerify,
   }: any = useContexts();
 
   const { handleMintStarknet } = useFunctionIDO();
@@ -37,21 +29,15 @@ const Mintlist = () => {
   const attributes = dataCMS?.attributes;
   const pricePublic = attributes?.pricePublic;
 
-  // const maxPublicMint = attributes?.maxPublicMint;
-
-  const publicAccountLimit = attributes?.publicAccountLimit;
-  // const publicAccountLimit = 100
   const currentAccountMint = accNftData[attributes?.code]?.public || 0;
 
   const publicStartTime = attributes?.publicStartTime;
   const publicEndTime = attributes?.publicEndTime;
   const poolName = attributes?.mintPoolPublicName || "Public";
 
-  const [quantityMint, setQuantityMint] = useState<any>(0);
+  const [quantityMint, setQuantityMint] = useState<any>(1);
 
   const mintNFT = async (type: any) => {
-    if (currentAccountMint + quantityMint > publicAccountLimit)
-      return toast.error("Quantity is higher than Limit!");
     attributes?.chainNetwork?.includes("starknet") &&
       (await handleMintStarknet(type, quantityMint));
   };
@@ -64,20 +50,6 @@ const Mintlist = () => {
     () => getCurrencyByChain(attributes?.chainNetwork?.toLowerCase()),
     [attributes?.chainNetwork]
   );
-
-  const handleChangeQuantity = (type: any) => {
-    if (type == "minus") {
-      if (quantityMint == 1) return;
-      else setQuantityMint(quantityMint - 1);
-    } else if (type == "plus") {
-      if (quantityMint == publicAccountLimit) return;
-      else setQuantityMint(quantityMint + 1);
-    }
-  };
-
-  useEffect(() => {
-    setQuantityMint(publicAccountLimit - currentAccountMint);
-  }, [publicAccountLimit, currentAccountMint]);
 
   const getMaxPublicMint = () => {
     if (
@@ -119,19 +91,11 @@ const Mintlist = () => {
             <div className="flex justify-between">
               <div className="flex flex-col gap-1">
                 <div className="text-white text-lg">{poolName}</div>
-                {currentAccountMint > 0 && (
-                  <div className="text-secondary flex items-center gap-2">
-                    Minted:
-                    <div className="text-white"> {currentAccountMint}</div>
-                  </div>
-                )}
+                {currentAccountMint > 0}
               </div>
               {Number(currentPublicMint) >= Number(maxPublicMint) && (
                 <span className="text-primary text-lg">SOLD OUT</span>
               )}
-            </div>
-            <div className="mt-4">
-              <Bar current={currentPublicMint} max={maxPublicMint} />
             </div>
             <div className="flex flex-row gap-3 rounded-2xl pt-3">
               <div className="flex flex-col bg-layer-2 basis-[33.33%] p-2 py-[1rem] rounded-lg items-center">
@@ -139,7 +103,7 @@ const Mintlist = () => {
                 <span className="text-[18px] text-white mt-1 font-display font-semibold flex items-center">
                   <Image
                     src={currency.image}
-                    alt="Venom"
+                    alt="Strk"
                     width={20}
                     height={20}
                     className="mr-2"
@@ -157,31 +121,13 @@ const Mintlist = () => {
               <div className="flex flex-col bg-layer-2 basis-[33.33%] p-2 py-[1rem] rounded-lg items-center">
                 <span className="text-secondary text-[14px]">Items</span>
                 <span className=" text-[18px] text-white mt-1 font-display font-semibold">
-                  {Number(maxPublicMint) == 0 ? (
-                    `TBA`
-                  ) : Number(maxPublicMint) >= 1000000 ? (
-                    "∞"
-                  ) : (
-                    <NumericFormat
-                      value={maxPublicMint}
-                      displayType="text"
-                      thousandSeparator=","
-                    />
-                  )}
+                  {"∞"}
                 </span>
               </div>
               <div className="flex flex-col bg-layer-2 basis-[33.33%] p-2 py-[1rem] rounded-lg items-center">
                 <span className="text-secondary text-[14px]">Max</span>
                 <span className=" text-[18px] text-white mt-1 font-display font-semibold">
-                  {Number(publicAccountLimit) >= 999 ? (
-                    "∞"
-                  ) : (
-                    <NumericFormat
-                      value={publicAccountLimit}
-                      displayType="text"
-                      thousandSeparator=","
-                    />
-                  )}
+                  {"∞"}
                 </span>
               </div>
             </div>
@@ -230,59 +176,17 @@ const Mintlist = () => {
                   <div className="flex items-center justify-evenly pt-3 text-white">
                     {!!account &&
                       rightChain &&
-                      currentPublicMint < maxPublicMint &&
-                      (currentAccountMint < publicAccountLimit ? (
+                      currentPublicMint < maxPublicMint && (
                         <div className="flex items-center gap-10 max-sm:gap-2 w-full">
-                          <div className="flex items-center gap-6 max-sm:gap-2">
-                            <Button
-                              onClick={() => handleChangeQuantity("minus")}
-                              className="btn-secondary aspect-square"
-                            >
-                              -
-                            </Button>
-                            {quantityMint}
-                            <Button
-                              onClick={() => handleChangeQuantity("plus")}
-                              className="btn-secondary aspect-square"
-                            >
-                              +
-                            </Button>
-                          </div>
                           <Button
                             loading={loadingPL}
                             onClick={() => !loadingPL && mintNFT("public")}
                             className="btn-primary w-full"
-                            disabled={
-                              !(
-                                (discordVerify ||
-                                  attributes?.enableDiscordFollowsCheck !=
-                                    true) &&
-                                (twitterVerifyPN ||
-                                  attributes?.enableFollowsCheck != true) &&
-                                (retweetVerify ||
-                                  attributes?.enableRetweetCheck != true) &&
-                                (ventoryVerify ||
-                                  attributes?.enableVentoryFollowsCheck != true)
-                              )
-                            }
                           >
-                            {(discordVerify ||
-                              attributes?.enableDiscordFollowsCheck != true) &&
-                            (twitterVerifyPN ||
-                              attributes?.enableFollowsCheck != true) &&
-                            (retweetVerify ||
-                              attributes?.enableRetweetCheck != true) &&
-                            (ventoryVerify ||
-                              attributes?.enableVentoryFollowsCheck != true)
-                              ? `Mint NFT`
-                              : "Do the task below to mint NFT"}
+                            {`Mint NFT`}
                           </Button>
                         </div>
-                      ) : (
-                        <span className="text-primary text-lg">
-                          You have reached max NFT
-                        </span>
-                      ))}
+                      )}
                     {(!account || !rightChain) && (
                       <Button
                         onClick={onShowDrawerConnectWallet}
@@ -298,9 +202,3 @@ const Mintlist = () => {
   );
 };
 export default Mintlist;
-
-// (${currentAccountMint}/${
-//   Number(publicAccountLimit) > 1000000
-//   ? "∞"
-//   : publicAccountLimit
-// })

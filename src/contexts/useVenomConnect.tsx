@@ -1,11 +1,8 @@
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants/authentication";
 import { setToken } from "@/service/api";
 import { loginApi } from "@/service/authentication";
-import { getUserPro5 } from "@/service/user";
 import { formatBalance } from "@/utils";
 import { useWalletKit } from "@mysten/wallet-kit";
 import { createContext, useCallback, useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import useProviderSigner from "./useProviderSigner";
 
 export const targetNetworkIdTestnet = 1000;
@@ -43,11 +40,9 @@ export function VenomProvider({ children }: { children: any }) {
   const [provider, setProvider] = useState<any>(undefined);
   const [account, setAccount] = useState<any>(undefined);
   const [balance, setBalance] = useState<any>(undefined);
-  // const [selectedNetworkId, setSelectedNetworkId] = useState(1000);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [setCookie, removeCookie] = useCookies([ACCESS_TOKEN, REFRESH_TOKEN]);
   const [profile, setProfile] = useState<any>([]);
   const [connected, setConnected] = useState(false);
   const { getBalanceByAddress } = useProviderSigner();
@@ -82,12 +77,10 @@ export function VenomProvider({ children }: { children: any }) {
       const res = await loginApi({
         address: account,
         network: 1,
-        signature: `tocen::login::${Date.now()}`,
+        signature: `starknet::login::${Date.now()}`,
       });
       if (res?.data?.token) {
         setIsAuthenticated(true);
-        // setCookie(ACCESS_TOKEN, res.data.token);
-        // setCookie(REFRESH_TOKEN, res.data.refreshToken);
         setToken(res.data.token);
       }
     };
@@ -105,9 +98,6 @@ export function VenomProvider({ children }: { children: any }) {
   const logout = useCallback(async () => {
     await venomConnect.disconnect();
     setAccount(undefined);
-    setIsAuthenticated(false);
-    // removeCookie(ACCESS_TOKEN);
-    // removeCookie(REFRESH_TOKEN);
   }, [venomConnect]);
 
   return (

@@ -8,8 +8,6 @@ import { VenomProvider } from "../contexts/useVenomConnect";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import LeftSideMenu from "@/components/side-menu/LeftSideMenu";
-import RightSideMenu from "@/components/side-menu/RightSideMenu";
-import MobileSideMenu from "@/components/side-menu/MobileSideMenu";
 import { Toaster } from "react-hot-toast";
 import Meta from "@/layout/Meta";
 import Script from "next/script";
@@ -55,13 +53,11 @@ export default function App({ Component, pageProps }: AppProps) {
               />
               <Header />
               <div className="flex items-start justify-between flex-1 px-2 sm:layout pt-4">
-                <MobileSideMenu />
                 <LeftSideMenu />
                 <div className="px-2 sm:px-8 flex-1 w-0">
                   <Toaster />
                   <Component {...pageProps} />
                 </div>
-                {<RightSideMenu />}
               </div>
               <Footer />
             </main>

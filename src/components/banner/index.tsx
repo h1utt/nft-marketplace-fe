@@ -12,19 +12,14 @@ import Items_Countdown_timer from "../items_countdown_timer";
 import IconVerified from "@/assets/icons/IconVerified";
 import IconArrow from "@/assets/icons/IconArrow";
 import { NumericFormat } from "react-number-format";
-import { toast } from "react-hot-toast";
 import { getLogoURL } from "@/helper/url";
 import CustomImage from "../custom-image";
 import { useEffect, useState } from "react";
-import { getBannerFeature } from "@/service/homepage";
 
 function Banner() {
   const [dataBanner, setDataBanner] = useState([]);
   const getDataBanner = async () => {
     try {
-      // const allData = await getBannerFeature([]);
-      // const all = allData?.data || [];
-      // setDataBanner(all);
     } catch (ex) {
       console.log(ex);
     }
@@ -62,17 +57,6 @@ function Banner() {
     } catch (ex) {
       console.log(ex);
     }
-  };
-  const getSUIprice = (idx: any) => {
-    try {
-      const pricePublic = idx?.pricePublic;
-      if (pricePublic == -1) return "TBA";
-      else if (pricePublic == 0) return "0 STRK";
-      else if (pricePublic) return `${pricePublic} STRK`;
-    } catch (ex) {
-      console.log(ex);
-    }
-    return "-- STRK";
   };
   useEffect(() => {
     getDataBanner();
@@ -174,9 +158,6 @@ function Banner() {
                                     <div className="font-normal text-xs">
                                       Starting
                                     </div>
-                                    <div className="text-sm font-semibold">{`${getSUIprice(
-                                      item
-                                    )}`}</div>
                                   </div>
                                 </div>
                                 {isDateGreater(

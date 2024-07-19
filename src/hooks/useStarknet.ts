@@ -1,6 +1,5 @@
 import {
   STARKNET_ETH_ADDRESS,
-  STARKNET_ETH_MARKET_CONTRACT,
   STARKNET_OFFSET,
   STARKNET_STRK_ADDRESS,
   STARKNET_STRK_MARKET_CONTRACT_NEW,
@@ -58,18 +57,6 @@ const useStarknet = () => {
     abi: MarketStarknetAbi,
   }) as any;
 
-  const increaseAllowanceEth = async (
-    amount: number,
-    operatorAddress: string
-  ) => {
-    ethContract?.connect(account as any);
-    const res = await ethContract?.increaseAllowance(
-      operatorAddress,
-      cairo.uint256(amount)
-    );
-    await provider.waitForTransaction(res?.transaction_hash);
-  };
-
   const increaseAllowanceStrk = async (
     amount: number,
     operatorAddress: string
@@ -110,20 +97,18 @@ const useStarknet = () => {
     collectionContract.connect(account as any);
     const isApproved = await collectionContract.isApprovedForAll(
       address,
-      data?.tokenUnit == "0"
-        ? STARKNET_ETH_MARKET_CONTRACT
-        : STARKNET_STRK_MARKET_CONTRACT_NEW
+      STARKNET_STRK_MARKET_CONTRACT_NEW
     );
+    console.log("Check 2");
     if (!isApproved && executeApprove) {
       const setApproval = await collectionContract.setApprovalForAll(
-        data?.tokenUnit == "0"
-          ? STARKNET_ETH_MARKET_CONTRACT
-          : STARKNET_STRK_MARKET_CONTRACT_NEW,
+        STARKNET_STRK_MARKET_CONTRACT_NEW,
         true
       );
     }
     return isApproved;
   };
+
   const { signTypedDataAsync } = useSignTypedData({});
 
   const handleGetContract = (data: any) => {
@@ -283,11 +268,11 @@ const useStarknet = () => {
       data?.price
     );
     const dataList = {
-      nftId: data?.id, // id bản ghi
+      nftId: data?.id,
       price: new BigNumber(data?.price)
         .multipliedBy(STARKNET_OFFSET)
         .toString(),
-      listingCounter: nonce?.data, // nonce
+      listingCounter: nonce?.data,
       messageHash: msgHash,
       signatureR: signatureR,
       signatureS: signatureS,
@@ -399,11 +384,12 @@ const useStarknet = () => {
     }
     const offer = {
       offer_counter: data?.offerId,
-      token_id: data?.nftId?.split("_")[1],
+      token_id: data?.tokenId,
       price: Number(data?.price),
       asset_contract: data?.collectionAddress,
       offeror: address,
     };
+    console.log(offer);
     const res = await handleGetContract(data).contract.cancelOffer(offer, sign);
     return res;
   };
@@ -428,15 +414,15 @@ const useStarknet = () => {
       ...(isApproved
         ? []
         : [
-            {
-              contractAddress: data?.collectionAddress,
-              entrypoint: "setApprovalForAll",
-              calldata: CallData.compile({
-                operator: handleGetContract(data).contract_addr,
-                approved: 1,
-              }),
-            },
-          ]),
+          {
+            contractAddress: data?.collectionAddress,
+            entrypoint: "setApprovalForAll",
+            calldata: CallData.compile({
+              operator: handleGetContract(data).contract_addr,
+              approved: 1,
+            }),
+          },
+        ]),
 
       {
         contractAddress: handleGetContract(data).contract_addr,
@@ -448,7 +434,6 @@ const useStarknet = () => {
       },
     ]);
     await provider.waitForTransaction(tx?.transaction_hash);
-    // const res = await marketContract?.acceptOffer(offerId);
     return tx;
   };
 
@@ -467,12 +452,12 @@ const useStarknet = () => {
       data?.price
     );
     const dataOffer = {
-      collectionAddress: data?.collectionAddress, // id bản ghi
+      collectionAddress: data?.collectionAddress,
       price: new BigNumber(data?.price)
         .multipliedBy(STARKNET_OFFSET)
         .toString(),
       quantity: data?.quantity,
-      nonce: nonce?.data, // nonce
+      nonce: nonce?.data,
       expireTime: data?.expireTime,
       messageHash: msgHash,
       signatureR: signatureR,
@@ -504,7 +489,6 @@ const useStarknet = () => {
       sign
     );
 
-    // const res = await marketContract?.cancelCollectionOffer(collectionOfferId);
     return res;
   };
 
@@ -528,15 +512,15 @@ const useStarknet = () => {
       ...(isApproved
         ? []
         : [
-            {
-              contractAddress: data?.collectionAddress,
-              entrypoint: "setApprovalForAll",
-              calldata: CallData.compile({
-                operator: handleGetContract(data).contract_addr,
-                approved: 1,
-              }),
-            },
-          ]),
+          {
+            contractAddress: data?.collectionAddress,
+            entrypoint: "setApprovalForAll",
+            calldata: CallData.compile({
+              operator: handleGetContract(data).contract_addr,
+              approved: 1,
+            }),
+          },
+        ]),
       {
         contractAddress: handleGetContract(data).contract_addr,
         entrypoint: "acceptCollectionOffer",

@@ -1,14 +1,9 @@
 import {
-  CHAIN_VALUES,
   POOL_TYPE,
-  STARKNET_ETH_ADDRESS,
   STARKNET_OFFSET,
-  STARKNET_STRK_ADDRESS,
 } from "@/constants";
 import { useVenom } from "@/contexts/useVenom";
-import { signMintINOStarknet, updateCurrentNFT } from "@/service/ino";
 import { useAccount, useProvider } from "@starknet-react/core";
-import { Address } from "everscale-inpage-provider";
 import { toast } from "react-hot-toast";
 import { useContexts } from "./context";
 import { CallData, cairo } from "starknet";
@@ -16,30 +11,19 @@ import BigNumber from "bignumber.js";
 
 export const enumPool = {
   public: 1,
-  private: 2,
-  whitelist: 3,
-  holder: 4,
 } as any;
 const useFunctionIDO = () => {
   const { provider } = useVenom();
   const {
     setLoadingPL,
-    setLoadingPV,
-    setLoadingWL,
     setLoadingHD,
     dataCMS,
-    setNFTDataPool,
-    setNftMinted,
     onShowModalMintSuccess,
     getDataServer,
   }: any = useContexts();
 
-  const addressMint = new Address(dataCMS?.attributes?.SC_collection);
   const attributes = dataCMS?.attributes;
   const pricePublic = attributes?.pricePublic;
-  const priceWhitelist = attributes?.priceWhitelist;
-  const pricePrivate = attributes?.pricePrivate;
-  const priceKeyHolder = attributes?.priceKeyHolder;
   const { provider: starknetProvider } = useProvider();
   const { account } = useAccount();
 
@@ -52,37 +36,15 @@ const useFunctionIDO = () => {
       };
       let value: any = 0;
       switch (type) {
-        case "whitelist":
-          setLoadingWL(true);
-          value = new BigNumber(priceWhitelist)
-            .multipliedBy(STARKNET_OFFSET)
-            .toString();
-          optionsMint.pool = POOL_TYPE.WHITELIST;
-          break;
         case "public":
           setLoadingPL(true);
           value = new BigNumber(pricePublic)
             .multipliedBy(STARKNET_OFFSET)
             .toString();
           break;
-        case "private":
-          setLoadingPV(true);
-          value = new BigNumber(pricePrivate)
-            .multipliedBy(STARKNET_OFFSET)
-            .toString();
-          optionsMint.pool = POOL_TYPE.PRIVATE;
-          break;
-        case "holder":
-          setLoadingHD(true);
-          value = new BigNumber(priceKeyHolder)
-            .multipliedBy(STARKNET_OFFSET)
-            .toString();
-          optionsMint.pool = POOL_TYPE.HOLDER;
-          break;
         default:
           break;
       }
-      let sign = {} as any;
       let multiCall = {} as any;
       if (quantity == 1) {
         multiCall = await account?.execute([
@@ -97,33 +59,22 @@ const useFunctionIDO = () => {
       const receipt: any = await starknetProvider?.waitForTransaction(
         multiCall?.transaction_hash as any
       );
-      const dataUpdate = {
-        project: dataCMS?.attributes?.code,
-        type: type,
-        txnID: multiCall?.transaction_hash,
-        quantity: quantity,
-      };
+      console.log(receipt);
       if (receipt?.execution_status === "SUCCEEDED") {
-        await updateCurrentNFT(dataUpdate);
         await getDataServer();
         toast.success("Mint success!");
         onShowModalMintSuccess();
       } else {
         toast.error("Mint failed!");
       }
+      console.log(receipt);
     } catch (err: any) {
       console.log(err);
       toast.error(err?.message);
     } finally {
       switch (type) {
-        case "whitelist":
-          setLoadingWL(false);
-          break;
         case "public":
           setLoadingPL(false);
-          break;
-        case "private":
-          setLoadingPV(false);
           break;
         case "holder":
           setLoadingHD(false);

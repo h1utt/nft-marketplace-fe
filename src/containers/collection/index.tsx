@@ -2,27 +2,17 @@ import IconBookmark from "@/assets/icons/IconBookmark";
 import IconPricetag from "@/assets/icons/IconPricetag";
 import IconVerified from "@/assets/icons/IconVerified";
 import CustomImage from "@/components/custom-image";
-import { useVenom } from "@/contexts/useVenom";
-import { formatBalance, formatWallet } from "@/utils";
+import { formatBalance, formatAddress } from "@/utils";
 import { Button, Tabs } from "antd";
 import Items from "./Items";
 import ReadMore from "@/components/read-more";
 import { useCollectionDetailContext } from "./context";
 import Activities from "./activities";
 import cx from "classnames";
-import Analysis from "./Analysis";
-import MintDetailContainer from "./ino";
-import { toast } from "react-hot-toast";
-import { use, useState } from "react";
-import { useWalletKit } from "@mysten/wallet-kit";
-import { TransactionBlock } from "@mysten/sui.js";
-import { TYPE_TICKET } from "@/constants/market";
 import useShowModal from "@/hooks/useShowModal";
 import ModalMakeCollectionOffer from "@/components/custom-modal/ModalMakeCollectionOffer";
 
 const CollectionDetailContainer = () => {
-  const { signAndExecuteTransactionBlock } = useWalletKit();
-  const [loadingTicket, setLoadingTicket] = useState(false);
   const { collectionDetail, tab, onSelectTab, handleAddToWatchlist } =
     useCollectionDetailContext();
 
@@ -36,10 +26,6 @@ const CollectionDetailContainer = () => {
     {
       name: "Item",
       value: collectionDetail?.total_items || 0,
-    },
-    {
-      name: "Owners",
-      value: collectionDetail?.owners || 0,
     },
     {
       name: "Listings",
@@ -62,20 +48,9 @@ const CollectionDetailContainer = () => {
       children: <Items />,
     },
     {
-      key: "2",
-      label: "Analytics",
-      children: <Analysis />,
-      // children: "",
-    },
-    {
       key: "3",
       label: "Activities",
       children: <Activities />,
-    },
-    {
-      key: "4",
-      label: "Mint NFT",
-      children: <MintDetailContainer />,
     },
   ];
   return (
@@ -104,7 +79,7 @@ const CollectionDetailContainer = () => {
                 <IconVerified />
               </div>
               <p className="text-secondary font-medium">
-                {formatWallet(collectionDetail?.address)}
+                {formatAddress(collectionDetail?.address)}
               </p>
               <ReadMore className="text-secondary text-sm mt-2 hidden sm:block">
                 {collectionDetail?.description
@@ -112,19 +87,6 @@ const CollectionDetailContainer = () => {
                   : "No description"}
               </ReadMore>
               <div className="items-center space-x-4 mt-2 hidden sm:flex">
-                <Button
-                  className={cx("btn-ghost", {
-                    "bg-layer-3 text-primary": collectionDetail?.isLike,
-                  })}
-                  onClick={handleAddToWatchlist}
-                >
-                  {collectionDetail?.isLike ? (
-                    <IconBookmark className="fill-primary" stroke="#00C089" />
-                  ) : (
-                    <IconBookmark />
-                  )}
-                  <span className="ml-2">Watchlist</span>
-                </Button>
                 <Button
                   onClick={onShowModalMakeCollectionOffer}
                   className="btn-secondary"

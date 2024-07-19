@@ -1,39 +1,31 @@
-import { useVenom } from "@/contexts/useVenom";
-import { formatWallet } from "@/utils";
+import { formatAddress } from "@/utils";
 import React from "react";
 import { useNftDetailContext } from "./context";
 
 const OverviewTab = () => {
-  const { account } = useVenom();
-  const { nftDetail } = useNftDetailContext();
+  const { nftDetail } = useNftDetailContext() || {};
+  const collectionAddress = nftDetail?.nftId?.split("_")[0];
+  const nftTokenId = nftDetail?.nftId?.split("_")[1];
   const overviewInfos = [
     {
       name: "Contract Address",
       value: (
         <span className="text-primary font-medium">
-          {formatWallet(nftDetail?.nftId)}
+          {formatAddress(collectionAddress)}
         </span>
       ),
     },
-    // {
-    //   name: "Token ID",
-    //   value: <span className="text-primary font-medium">2138</span>,
-    // },
+    {
+      name: "Token ID",
+      value: <span className="text-primary font-medium">{nftTokenId}</span>,
+    },
     {
       name: "Chain",
       value: <span className="text-white font-medium">Starknet</span>,
     },
     {
       name: "Token Standard",
-      value: <span className="text-white font-medium">TIP 4</span>,
-    },
-    {
-      name: "Last Updated",
-      value: <span className="text-white font-medium">1 month ago</span>,
-    },
-    {
-      name: "Creator Earnings",
-      value: <span className="text-white font-medium">0.2%</span>,
+      value: <span className="text-white font-medium">ERC 721</span>,
     },
   ];
   return (

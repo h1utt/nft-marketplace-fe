@@ -1,33 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useVenom } from "@/contexts/useVenom";
-import { getINOPool, getINOUser, getProjectCMSByCode } from "@/service/ino";
+import { getINOUser } from "@/service/ino";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { createContext, useContext } from "react";
-import NFTAbiDevnet from "../../../contexts/abi/CollectionSimilar.abi.json";
 import useShowModal from "@/hooks/useShowModal";
-import { getStoreKey } from "../Task";
-import { getStoreKeyPN } from "../TaskPartner";
 import { useProvider } from "@starknet-react/core";
-import { CHAIN_VALUES } from "@/constants";
 import { Contract } from "starknet";
 import { useApplicationContext } from "@/contexts/useApplication";
 import useMounted from "@/hooks/useMounted";
-import { getStoreKeyRT } from "../TaskRetweet";
-import { getStoreKeyVT } from "../TaskVentory";
-import toast from "react-hot-toast";
-import ventorians from "../../../json/ventorians.json";
-import dragarkelementnft from "../../../json/dragarkelementnft.json";
-import madape from "../../../json/madape.json";
+import collection_1 from "../../../json/collection_1.json";
+import collection_2 from "../../../json/collection_2.json";
+import collection_3 from "../../../json/collection_3.json";
 
 export const INOContext = createContext([]);
 export const useContexts = () => useContext(INOContext);
 export const Provider = ({ children }: any) => {
   const { provider, isInitializing } = useVenom();
-  const [discordVerify, setDiscordVerify] = useState<any>("");
-  const [twitterVerifyPN, setTwitterVerifyPN] = useState<any>("");
-  const [retweetVerify, setRetweetVerify] = useState<any>("");
-  const [ventoryVerify, setVentoryVerify] = useState<any>("");
   const [dataCMS, setDataCMS] = useState<any>({});
   const [loadingPL, setLoadingPL] = useState(false);
   const [loadingPV, setLoadingPV] = useState(false);
@@ -60,28 +49,15 @@ export const Provider = ({ children }: any) => {
 
   const getDataCMS = async () => {
     try {
-      // const allData = await getProjectCMSByCode(id);
       let all = [] as any;
-      if (id == "ventorians") {
-        all = ventorians;
-      } else if (id == "dragarkelementnft") {
-        all = dragarkelementnft;
-      } else if (id == "madape") {
-        all = madape;
+      if (id == "collection_1") {
+        all = collection_1;
+      } else if (id == "collection_2") {
+        all = collection_2;
+      } else if (id == "collection_3") {
+        all = collection_3;
       }
       setDataCMS(all);
-      setDiscordVerify(
-        !!localStorage.getItem(getStoreKey(all?.attributes?.code))
-      );
-      setTwitterVerifyPN(
-        !!localStorage.getItem(getStoreKeyPN(all?.attributes?.code))
-      );
-      setRetweetVerify(
-        !!localStorage.getItem(getStoreKeyRT(all?.attributes?.code))
-      );
-      setVentoryVerify(
-        !!localStorage.getItem(getStoreKeyVT(all?.attributes?.code))
-      );
     } catch (ex) {
       console.log(ex);
     }
@@ -91,8 +67,6 @@ export const Provider = ({ children }: any) => {
     const options = {
       project: id,
     };
-    const response = await getINOPool(options);
-    setNFTDataPoolSV(response?.data?.data || []);
     const dataUser = await getINOUser([]);
     setAccNFTData(dataUser?.data?.data || {});
   };
@@ -102,40 +76,20 @@ export const Provider = ({ children }: any) => {
       if (dataCMS?.attributes?.SC_collection) {
         let total = 0 as any;
 
-        if (
-          dataCMS?.attributes?.chainNetwork === CHAIN_VALUES.STARKNET ||
-          dataCMS?.attributes?.chainNetwork === CHAIN_VALUES.STARKNET_ETH
-        ) {
-          const { abi } = await starknetProvider.getClassAt(
-            dataCMS?.attributes?.SC_collection
-          );
-          const collectionContract = new Contract(
-            abi,
-            dataCMS?.attributes?.SC_collection,
-            starknetProvider
-          );
+        const { abi } = await starknetProvider.getClassAt(
+          dataCMS?.attributes?.SC_collection
+        );
+        const collectionContract = new Contract(
+          abi,
+          dataCMS?.attributes?.SC_collection,
+          starknetProvider
+        );
 
-          const dataTotal = await collectionContract.get_sum_pool();
-          setMintedByPool({
-            public: dataTotal[1],
-            private: dataTotal[2],
-            whitelist: dataTotal[3],
-            holder: dataTotal[4],
-          });
-          total = Number(dataTotal[0]);
-        } else if (
-          dataCMS?.attributes?.chainNetwork === CHAIN_VALUES.VENOM ||
-          dataCMS?.attributes?.chainNetwork === CHAIN_VALUES.VENOM
-        ) {
-          const contract = new provider.Contract(
-            NFTAbiDevnet,
-            dataCMS?.attributes?.SC_collection
-          );
-          const { count: id } = await contract.methods
-            .totalSupply({ answerId: 0 })
-            .call();
-          total = id;
-        }
+        const dataTotal = await collectionContract.get_sum_pool();
+        setMintedByPool({
+          public: dataTotal[1],
+        });
+        total = Number(dataTotal[0]);
         setNFTDataPool(total);
       }
     } catch (ex) {
@@ -189,18 +143,10 @@ export const Provider = ({ children }: any) => {
       showModalMintSuccess,
       onHideModalMintSuccess,
       onShowModalMintSuccess,
-      discordVerify,
-      setDiscordVerify,
       nftDataPoolSV,
-      twitterVerifyPN,
-      setTwitterVerifyPN,
       getDataServer,
       mintedByPool,
       setMintedByPool,
-      retweetVerify,
-      setRetweetVerify,
-      ventoryVerify,
-      setVentoryVerify,
       comment,
       setComment,
       loadMoreChat,
@@ -224,17 +170,9 @@ export const Provider = ({ children }: any) => {
     showModalMintSuccess,
     onHideModalMintSuccess,
     onShowModalMintSuccess,
-    discordVerify,
-    setDiscordVerify,
     nftDataPoolSV,
-    twitterVerifyPN,
-    setTwitterVerifyPN,
     mintedByPool,
     setMintedByPool,
-    retweetVerify,
-    setRetweetVerify,
-    ventoryVerify,
-    setVentoryVerify,
     comment,
     setComment,
     pagination,

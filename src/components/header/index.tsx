@@ -1,18 +1,14 @@
-import IconArrowDown from "@/assets/icons/IconArrowDown";
-import { useVenom } from "@/contexts/useVenom";
-import { formatWallet } from "@/utils";
+import { formatAddress } from "@/utils";
 import { Button } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import DefaultAvatar from "../../../public/images/default_avatar.png";
-import Logo from "../../../public/images/logo/fami.png";
-import VenomToken from "../../../public/images/token/venom.png";
+import Logo from "../../../public/images/logo/logo_final.png";
+import StrkToken from "../../../public/images/token/strk.png";
 import cx from "classnames";
 import { useRouter } from "next/router";
-import MobileLogo from "../../../public/images/logo/logo_footer.png";
 import IconHamburger from "@/assets/icons/IconHamburger";
 import IconSearch from "@/assets/icons/IconSearch";
-import IconCart from "@/assets/icons/IconCart";
 import { Drawer } from "antd";
 import { useState } from "react";
 import IconNoti from "@/assets/icons/IconNoti";
@@ -21,7 +17,7 @@ import IconSetting from "@/assets/icons/IconSetting";
 import DrawerWallet from "../custom-drawer/DrawerWallet";
 import useShowModal from "@/hooks/useShowModal";
 import Search from "./Search";
-import { ConnectButton, useWalletKit } from "@mysten/wallet-kit";
+import { ConnectButton } from "@mysten/wallet-kit";
 import { useApplicationContext } from "@/contexts/useApplication";
 import DrawerConnectWallet from "../custom-drawer/DrawerConnectWallet";
 
@@ -68,7 +64,7 @@ const Header = () => {
             <div className="bg-layer-1 rounded-lg flex items-center p-2 space-x-2">
               <Image src={DefaultAvatar} alt="Avatar" width={24} height={24} />
               <span className="text-white font-medium">
-                {formatWallet(currentConnectedAccount?.address)}
+                {formatAddress(currentConnectedAccount?.address)}
               </span>
             </div>
           )
@@ -114,13 +110,12 @@ const Header = () => {
             <Image src={Logo} alt="Logo" />
           </Link>
           <Search />
-          <div className="bg-layer-3 rounded-lg p-2 flex items-center space-x-3 justify-self-end">
+          <div className="bg-layer-3 rounded-lg px-2 flex items-center space-x-3 justify-self-end h-[70px]">
             <div className="flex px-[0.5rem] items-center space-x-2 border-r border-solid border-focus">
-              <Image src={VenomToken} alt="Venom" />
+              <Image src={StrkToken} alt="Venom" />
               <div className="flex flex-col items-center">
                 <span className="text-white font-medium leading-6">STRK</span>
               </div>
-              <IconArrowDown />
             </div>
             {!isAuthenticated && (
               <Button
@@ -142,7 +137,7 @@ const Header = () => {
                 />
                 <div className="flex flex-col items-start justify-between">
                   <span className="text-white font-medium text-xs">
-                    {formatWallet(currentConnectedAccount)}
+                    {formatAddress(currentConnectedAccount)}
                   </span>
                 </div>
               </div>
@@ -160,17 +155,11 @@ const Header = () => {
               }}
             />
             <Link href="/" className="cursor-pointer">
-              <Image
-                className="w-[141px] h-[40px]"
-                src={MobileLogo}
-                alt="Logo"
-              />
             </Link>
           </div>
 
           <div className="flex items-center gap-[1rem]">
             <IconSearch />
-            <IconCart />
           </div>
         </div>
         {/* End Mobile Design */}

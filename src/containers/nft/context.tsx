@@ -1,6 +1,4 @@
-import { CHAIN_VALUES_ENUM, DEFAULT_LIMIT } from "@/constants";
 import { useApplicationContext } from "@/contexts/useApplication";
-import useProviderSigner from "@/contexts/useProviderSigner";
 import { useVenom } from "@/contexts/useVenom";
 import { getActivityApi } from "@/service/activity";
 import { getCollectionOfferApi } from "@/service/collection";
@@ -8,7 +6,6 @@ import {
   getMoreNftApi,
   getNftDetailApi,
   getOfferApi,
-  likeNftApi,
 } from "@/service/nft";
 import { useRouter } from "next/router";
 import {
@@ -63,13 +60,6 @@ const NftDetailProvider = ({ children }: { children: any }) => {
   });
   const [currentTab, setCurrentTab] = useState(NFT_DETAIL_TABS.OVERVIEW);
 
-  const handleLikeNft = useCallback(async () => {
-    if (isAuthenticated) {
-      const res = await likeNftApi(router.query.id as string);
-      if (res) return res;
-    } else login();
-  }, [isAuthenticated, login, router.query.id]);
-
   useEffect(() => {
     const getNftDetail = async (isReset = true) => {
       setLoading(true);
@@ -91,7 +81,7 @@ const NftDetailProvider = ({ children }: { children: any }) => {
         {
           limit: 4,
           page: 1,
-          network: nftDetail?.networkType,
+          network: 5,
         }
       );
 
@@ -99,7 +89,7 @@ const NftDetailProvider = ({ children }: { children: any }) => {
     };
 
     if (nftDetail?.collectionAddress) getMoreNfts();
-  }, [nftDetail?.collectionAddress, nftDetail?.networkType, router.query.id]);
+  }, [nftDetail?.collectionAddress, 5, router.query.id]);
 
   useEffect(() => {
     const getNftActivity = async () => {
@@ -107,7 +97,7 @@ const NftDetailProvider = ({ children }: { children: any }) => {
         searchBy: 1,
         address: router.query.id as string,
         ...pagination,
-        network: nftDetail?.networkType,
+        network: 5,
       });
       if (res.data)
         setActivity({ data: res.data.rows, nextPage: res.data.nextPage });
@@ -135,14 +125,14 @@ const NftDetailProvider = ({ children }: { children: any }) => {
     if (
       router.query.id &&
       currentTab === NFT_DETAIL_TABS.HISTORY &&
-      nftDetail?.networkType
+      5
     )
       getNftActivity();
 
     if (
       router.query.id &&
       currentTab === NFT_DETAIL_TABS.OFFER &&
-      nftDetail?.networkType
+      5
     ) {
       getNftOffer();
       getCollectionOffer();
@@ -151,7 +141,7 @@ const NftDetailProvider = ({ children }: { children: any }) => {
     currentTab,
     pagination,
     router.query.id,
-    nftDetail?.networkType,
+    5,
     nftDetail?.collectionAddress,
   ]);
 
@@ -161,7 +151,6 @@ const NftDetailProvider = ({ children }: { children: any }) => {
       setCurrentTab,
       nftDetail,
       moreNfts,
-      handleLikeNft,
       activity,
       nftOffer,
       collectionOffer,
@@ -170,7 +159,6 @@ const NftDetailProvider = ({ children }: { children: any }) => {
     currentTab,
     nftDetail,
     moreNfts,
-    handleLikeNft,
     activity,
     nftOffer,
     collectionOffer,

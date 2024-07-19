@@ -1,20 +1,14 @@
 import {
   CHAIN_ID_BY_NAME,
-  CHAIN_VALUES,
-  CHAIN_VALUES_ENUM,
   DEFAULT_LIMIT,
 } from "@/constants";
 import { useApplicationContext } from "@/contexts/useApplication";
-import useProviderSigner from "@/contexts/useProviderSigner";
 import { useVenom } from "@/contexts/useVenom";
 import { getActivityApi } from "@/service/activity";
 import {
-  getFavoriteNftsApi,
   getUserNFT,
   getUserOfferApi,
-  getWatchlistApi,
 } from "@/service/user";
-import { getData } from "@/utils/stotage";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -236,7 +230,7 @@ const UserProvider = ({ children }: { children: any }) => {
         const res = await getUserOfferApi({
           type: offerType,
           category: offerCategory,
-          networkType: CHAIN_ID_BY_NAME[activeChain as string],
+          networkType: 5,
           page: 1,
           limit: 100,
           walletAddress: account,
@@ -270,54 +264,11 @@ const UserProvider = ({ children }: { children: any }) => {
       setLoading(false);
     };
 
-    // const getOfferMade = async () => {
-    //   setLoading(true);
-    //   const res = await getOfferMadeApi({ address: id, ...pagination });
-    //   if (res.data)
-    //     setOfferMade({ data: res.data.rows, nextPage: res.data.nextPage });
-    //   setLoading(false);
-    // };
-
-    // const getOfferReceived = async () => {
-    //   setLoading(true);
-    //   const res = await getOfferReceivedApi({ address: id, ...pagination });
-    //   if (res.data)
-    //     setOfferReceived({ data: res.data.rows, nextPage: res.data.nextPage });
-    //   setLoading(false);
-    // };
-
-    const getFavoriteNfts = async () => {
-      setLoading(true);
-      const res = await getFavoriteNftsApi({
-        ...pagination,
-        network: CHAIN_ID_BY_NAME[activeChain as string],
-      });
-      if (res.data) {
-        setFavoriteNfts({ data: res.data.rows, nextPage: res.data.nextPage });
-      }
-      setLoading(false);
-    };
-
-    const getWatchlist = async () => {
-      setLoading(true);
-      const { data } = await getWatchlistApi({
-        ...paramsSearchRank,
-        ...pagination,
-        network: CHAIN_ID_BY_NAME[activeChain as string],
-      });
-      if (data?.data)
-        setWatchlist({ data: data.data.rows, nextPage: data.data.nextPage });
-    };
-
     if (account && tab === "4") getActivity();
-    // if (id && tab === 2) getOfferMade();
-    // if (id && tab === 3) getOfferReceived();
-    if (account && tab === "2") getFavoriteNfts();
-    if (account && tab === "3") getWatchlist();
   }, [account, pagination, tab, activityStatus, paramsSearchRank, activeChain]);
 
   const value = useMemo(() => {
-    const loadMoreNft = async () => {};
+    const loadMoreNft = async () => { };
     const onSelectTab = (value: string) => {
       setTab(value);
       setPagination({ page: 1, limit: DEFAULT_LIMIT });

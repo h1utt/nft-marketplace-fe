@@ -67,7 +67,6 @@ const useProviderSigner = () => {
       const provider = new JsonRpcProvider(getNetWork());
       const objectInfos = await provider.getOwnedObjects({
         owner: address,
-        // filter: '0x2::sui::STRK'
         options: { showType: true },
       });
       return objectInfos;
@@ -188,15 +187,6 @@ const useProviderSigner = () => {
     }
     return [];
   };
-
-  // const getBalanceByCoinType = async (address: any, type: any) => {
-  //   const totalBalance = await provider.getBalance({
-  //     owner: address,
-  //     coinType: type,
-  //   });
-  //   const coinMetaData = await provider.getCoinMetadata({ coinType: type });
-  //   return { ...totalBalance, ...coinMetaData };
-  // };
 
   const getAllCoins = async (address: any) => {
     if (!address) return false;

@@ -1,6 +1,6 @@
 import CustomImage from "@/components/custom-image";
 import { renderActivityStatus } from "@/containers/collection/activities/column";
-import { formatBalance, formatWallet } from "@/utils";
+import { formatBalance, formatAddress } from "@/utils";
 import moment from "moment";
 import Link from "next/link";
 
@@ -47,7 +47,7 @@ export const userActivityColumn = () => {
           href={`/user/${value}`}
           className="hover:text-current hover:underline"
         >
-          {formatWallet(value)}
+          {formatAddress(value)}
         </Link>
       ),
     },
@@ -63,7 +63,7 @@ export const userActivityColumn = () => {
               href={`/profile/${value}`}
               className="hover:text-current hover:underline"
             >
-              {formatWallet(value)}
+              {formatAddress(value)}
             </Link>
           );
       },

@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import CustomDrawer from ".";
 import { useApplicationContext } from "@/contexts/useApplication";
-import { getData } from "@/utils/stotage";
 
 interface IDrawerConnectWalletProps {
   open?: boolean;
@@ -16,7 +15,6 @@ interface IDrawerConnectWalletProps {
 }
 
 enum WALLET_TAB_VALUES {
-  // ALL = "all",
   MINT = "mint",
   STARKNET = "starknet",
 }

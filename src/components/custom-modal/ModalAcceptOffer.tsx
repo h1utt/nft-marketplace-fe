@@ -26,19 +26,15 @@ const ModalAcceptOffer = ({
 }: IModalAcceptOffer) => {
   const [loading, setLoading] = useState(false);
 
-  const { isVentorianHolder } = useApplicationContext();
   const { handleAcceptOfferStarknet, handleAcceptCollectionOfferStarknet } =
     useStarknet();
 
   const onAcceptOfferStarknet = async () => {
-    console.log(offerData);
-    console.log(nft);
     try {
       setLoading(true);
       let res: any;
       if (offerData?.quantity) {
         const [collectionAddress, nftTokenId] = nft?.nftId.split("_");
-        console.log(nftTokenId);
         res = await handleAcceptCollectionOfferStarknet({
           collectionOfferId: offerData?.offerId,
           quantity: offerData?.quantity,
@@ -74,7 +70,7 @@ const ModalAcceptOffer = ({
   };
 
   const getCurrency = useMemo(
-    () => getCurrencyByChain(nft?.networkType, nft?.tokenUnit),
+    () => getCurrencyByChain(5, 1),
     [nft]
   );
   return (
@@ -125,7 +121,7 @@ const ModalAcceptOffer = ({
                   {offerData?.price ? (
                     <FormatPrice
                       number={Number(
-                        formatBalanceByChain(offerData?.price, nft?.networkType)
+                        formatBalanceByChain(offerData?.price, 5)
                       )}
                     />
                   ) : (
@@ -146,14 +142,16 @@ const ModalAcceptOffer = ({
                 <span className="text-white font-medium text-base">
                   {offerData?.price ? (
                     <FormatPrice
-                      number={Number(
-                        formatBalanceByChain(offerData?.price, nft?.networkType)
-                      )}
+                    number={
+                      ((formatBalanceByChain(offerData.price, 5) ||
+                        0) *
+                        98) /
+                      100
+                    }
                     />
                   ) : (
                     "--"
                   )}{" "}
-                  {/* {getCurrency.currency} */}
                 </span>
               </div>
             </div>
@@ -164,7 +162,7 @@ const ModalAcceptOffer = ({
           <p className="text-lg font-medium">Fee</p>
           <div className="flex items-center justify-between mt-5">
             <span className="text-secondary text-base">
-              Creator Royalties (5%)
+              Platform (2%)
             </span>
             <div className="space-x-1 flex items-center">
               <Image
@@ -176,54 +174,23 @@ const ModalAcceptOffer = ({
               <span className="text-sm ">
                 <FormatPrice
                   number={
-                    ((formatBalanceByChain(offerData.price, nft?.networkType) ||
+                    ((formatBalanceByChain(offerData.price, 5) ||
                       0) *
-                      5) /
-                    100
-                  }
-                />
-                {/* {`${
-                
-              }`} */}
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-secondary text-base flex items-center">
-              Platform&nbsp;
-              {isVentorianHolder ? (
-                <div>
-                  <span className="line-through">(1.5%)</span>&nbsp;
-                  <span className="text-primary">(0%)</span>
-                </div>
-              ) : (
-                <span>(1.5%)</span>
-              )}
-            </div>
-            <div className="space-x-1 flex items-center">
-              <Image
-                src={getCurrency.image}
-                alt="token"
-                width={14}
-                height={14}
-              />
-              <span className="text-sm ">
-                <FormatPrice
-                  number={
-                    ((formatBalanceByChain(offerData.price, nft?.networkType) ||
-                      0) *
-                      1.5) /
+                      2) /
                     100
                   }
                 />
               </span>
             </div>
           </div>
-          {isVentorianHolder && (
-            <p className="text-primary mt-5">
-              As a VENTORIANS HOLDER, you don’t pay any platform fees
-            </p>
-          )}
+        </div>
+        <Divider className="border-stroke" />
+        <div>
+          <p className="text-base text-white">Check your Wallet</p>
+          <p className="text-secondary mt-4">
+            You’ll be asked to check and confirm this transaction from your
+            wallet.
+          </p>
         </div>
       </div>
     </CustomModal>

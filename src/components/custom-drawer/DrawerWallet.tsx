@@ -1,23 +1,20 @@
 import IconArrowForward from "@/assets/icons/IconArrowForward";
-import IconBookmarkOutline from "@/assets/icons/IconBookmarkOutline";
 import IconCopy from "@/assets/icons/IconCopy";
 import IconOff from "@/assets/icons/IconOff";
 import IconPersonOutline from "@/assets/icons/IconPersonOutline";
 import IconPieOutline from "@/assets/icons/IconPieOutline";
-import IconSettingOutline from "@/assets/icons/IconSettingOutline";
 import IconTrophyOutline from "@/assets/icons/IconTrophyOutline";
 import { CHAIN_VALUES } from "@/constants";
 import { LIST_WALLETS } from "@/constants/wallet";
 import { useApplicationContext } from "@/contexts/useApplication";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
-import { formatWallet, getCurrencyByChain } from "@/utils";
+import { formatAddress, getCurrencyByChain } from "@/utils";
 import { useAccount, useStarkProfile } from "@starknet-react/core";
 import { Button, Tooltip } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 import { toast } from "react-hot-toast";
-import { NumericFormat } from "react-number-format";
 import CustomDrawer from ".";
 import CustomImage from "../custom-image";
 import FormatPrice from "../FormatPrice";
@@ -48,11 +45,6 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
       name: "My Profile",
       href: `/user/${currentConnectedAccountNotFull}?tab=items`,
     },
-    // {
-    //   icon: <IconBookmarkOutline />,
-    //   name: "Watchlist",
-    //   href: `/user/${currentConnectedAccountNotFull}?tab=watchlist`,
-    // },
     {
       icon: <IconTrophyOutline />,
       name: "Rewards",
@@ -70,11 +62,6 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
         e.preventDefault();
         toast.success("Comming soon");
       },
-    },
-    {
-      icon: <IconSettingOutline />,
-      name: "Setting",
-      href: `/settings`,
     },
   ];
 
@@ -100,11 +87,11 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
             />
             <div className="flex flex-col items-start">
               <span className="text-white text-xl font-semibold">
-                {starkProfile?.name || profile?.userName || "Ventory"}
+                {starkProfile?.name || profile?.userName }
               </span>
               <div className="flex items-center space-x-3">
                 <span className="text-secondary font-medium">
-                  {formatWallet(currentConnectedAccountNotFull)}
+                  {formatAddress(currentConnectedAccountNotFull)}
                 </span>
                 <Tooltip title="Copied" placement="right" trigger={["click"]}>
                   <IconCopy
@@ -141,7 +128,7 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
             <div className="flex items-center space-x-2 justify-between">
               <Image
                 src={getCurrentConnectedWallet?.image as string}
-                alt="Venom"
+                alt="Starknet"
                 width={50}
                 height={50}
                 className="rounded-full"
@@ -152,7 +139,7 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
                 </span>
                 <div className="flex items-center space-x-3">
                   <span className="text-white font-medium">
-                    {formatWallet(currentConnectedAccountNotFull)}
+                    {formatAddress(currentConnectedAccountNotFull)}
                   </span>
                   <Tooltip title="Copied" placement="right" trigger={["click"]}>
                     <IconCopy
@@ -173,38 +160,21 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
               </Button>
             </div>
             <div className="rounded-lg bg-layer-1 p-4 space-y-2 mt-3">
-              {activeChain != CHAIN_VALUES.MINT && (
-                <div className="flex items-center space-x-1">
-                  <Image
-                    src={getCurrencyByChain(currentConnectedChain)?.image}
-                    alt="token"
-                    width={20}
-                    height={20}
-                  />
-                  <div className="text-white font-medium">
-                    <FormatPrice
-                      number={Number(currentConnectedAccountBalance?.strk)}
-                    />
-                    &nbsp;
-                    {getCurrencyByChain(currentConnectedChain)?.currency}
-                  </div>
-                </div>
-              )}
-              <div className="flex items-center space-x-1">
+              {<div className="flex items-center space-x-1">
                 <Image
-                  src={getCurrencyByChain(currentConnectedChain, 0)?.image}
+                  src={getCurrencyByChain(currentConnectedChain)?.image}
                   alt="token"
                   width={20}
                   height={20}
                 />
-                <span className="text-white font-medium">
+                <div className="text-white font-medium">
                   <FormatPrice
-                    number={Number(currentConnectedAccountBalance?.eth)}
+                    number={Number(currentConnectedAccountBalance?.strk)}
                   />
                   &nbsp;
-                  {getCurrencyByChain(currentConnectedChain, 0)?.currency}
-                </span>
-              </div>
+                  {"STRK"}
+                </div>
+              </div>}
             </div>
             <div className="flex space-x-2 mt-3">
               <Button
@@ -213,7 +183,12 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
               >
                 Swap ETH
               </Button>
-              <Button className="btn-secondary basis-1/2">Add funds</Button>
+              <Button
+                onClick={() => toast.success("Coming soon!")}
+                className="btn-secondary basis-1/2"
+              >
+                Add funds
+              </Button>
             </div>
           </div>
         </div>

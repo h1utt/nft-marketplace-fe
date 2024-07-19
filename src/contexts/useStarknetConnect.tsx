@@ -31,7 +31,7 @@ const StarknetProvider = ({ children }: IStarknetNetworkProps) => {
       provider={jsonRpcProvider({
         rpc: () => ({
           nodeUrl:
-            "https://starknet-mainnet.core.chainstack.com/9f0d58d1b789fb58ae2145e8afa8ddb5",
+            "https://starknet-mainnet.blastapi.io/22a201b5-9702-4020-8932-b7ed87168174/rpc/v0_7",
         }),
       })}
       explorer={voyager}

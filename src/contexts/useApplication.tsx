@@ -6,7 +6,6 @@ import {
   ACCESS_TOKEN,
   REFRESH_TOKEN,
 } from "@/constants/authentication";
-import useAddToCart from "@/hooks/useAddToCart";
 import useShowModal from "@/hooks/useShowModal";
 import useStarknet from "@/hooks/useStarknet";
 import { setToken } from "@/service/api";
@@ -14,11 +13,9 @@ import { loginApi } from "@/service/authentication";
 import {  getUserPro5 } from "@/service/user";
 import { formatStarknetWallet } from "@/utils";
 import { cookieSetting, getCookie } from "@/utils/cookie";
-import { deleteData, getData, saveData } from "@/utils/stotage";
 import {
   useAccount,
   useDisconnect,
-  useProvider,
   useSignTypedData,
 } from "@starknet-react/core";
 import {
@@ -32,7 +29,7 @@ import {
 import { useCookies } from "react-cookie";
 import { useVenom } from "./useVenom";
 import { jwtDecode } from "jwt-decode";
-import { ArraySignatureType, Contract, typedData } from "starknet";
+import { ArraySignatureType, typedData } from "starknet";
 
 interface IApplicationContextProps {
   addItem?: any;
@@ -69,7 +66,6 @@ interface IApplicationContextProps {
   onHideDrawerNoti?: any;
   ethPrice?: any;
   setEthPrice?: any;
-  isVentorianHolder?: boolean;
 }
 
 const ApplicationContext = createContext<IApplicationContextProps>({});
@@ -89,7 +85,6 @@ const ApplicationProvider = ({ children }: { children: any }) => {
   const { balance: starknetEthBalance, strkBalance } = useStarknet();
   const [slotAccountInfo, setSlotAccountInfo] = useState<any>(null);
   const [ethPrice, setEthPrice] = useState(0);
-  const [isVentorianHolder, setIsVentorianHolder] = useState(false);
 
   const { signTypedDataAsync } = useSignTypedData({});
 
@@ -122,7 +117,6 @@ const ApplicationProvider = ({ children }: { children: any }) => {
   );
 
   const currentConnectedAccountBalance = useMemo(() => {
-    if (currentConnectedChain === CHAIN_VALUES.VENOM) return balance;
     if (currentConnectedChain === CHAIN_VALUES.STARKNET)
       return {
         eth: starknetEthBalance?.formatted,
@@ -137,7 +131,6 @@ const ApplicationProvider = ({ children }: { children: any }) => {
 
 
   useEffect(() => {
-    if (account && !address) setCurrentConnectedChain(CHAIN_VALUES.VENOM);
     if (!account && address) setCurrentConnectedChain(CHAIN_VALUES.STARKNET);
   }, [account, address]);
 
@@ -238,41 +231,19 @@ const ApplicationProvider = ({ children }: { children: any }) => {
   };
 
   const onLogout = async () => {
-    if (currentConnectedChain === CHAIN_VALUES.VENOM) await logout();
     if (currentConnectedChain === CHAIN_VALUES.STARKNET) disconnect();
     removeCookie(ACCESS_TOKEN);
     removeCookie(REFRESH_TOKEN);
     setIsAuthenticated(false);
   };
 
-  const {
-    addItem,
-    removeItem,
-    items,
-    clearAll,
-    checkExist,
-    toggleItem,
-    totalItem,
-    removeListItems,
-    addListItem,
-  } = useAddToCart();
   return (
     <ApplicationContext.Provider
       value={{
-        addItem,
-        removeItem,
-        items,
-        clearAll,
-        checkExist,
-        toggleItem,
-        totalItem,
-        removeListItems,
-        addListItem,
         activeChain,
         setActiveChain,
         isAuthenticated,
         questProfile,
-        // getQuestProfile,
         profile,
         currentConnectedAccount,
         currentConnectedChain,
@@ -292,7 +263,6 @@ const ApplicationProvider = ({ children }: { children: any }) => {
         ethPrice,
         setEthPrice,
         setSlotAccountInfo,
-        isVentorianHolder,
       }}
     >
       {children}

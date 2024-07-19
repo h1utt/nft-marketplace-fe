@@ -1,6 +1,6 @@
 import INODetailContainer from "@/containers/ino";
 import { Provider } from "@/containers/ino/context";
-import React, { ReactElement } from "react";
+import React from "react";
 
 const INODetail = () => {
   return (

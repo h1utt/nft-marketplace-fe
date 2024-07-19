@@ -26,18 +26,6 @@ export const getMoreNftApi = async (
   }
 };
 
-export const likeNftApi = async (nftId: string) => {
-  try {
-    const res = await AxiosInstance.post(`/nft/like`, {
-      nftAddress: nftId,
-    });
-    const { data } = res;
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const getListOffer = async (address: any) => {
   try {
     const url = `/nft/get-offers/${address}?page=1&limit=100000`;
@@ -88,15 +76,6 @@ export const collectionOfferNFTStarknet = async (params: any) => {
   } catch (error) {
     console.log(error);
   }
-};
-
-export const delistNft = async (params: {
-  nftAddress: string;
-  tokenUnit: string;
-}) => {
-  const res = await AxiosInstance.post("/nft/delist", params);
-  const { data } = res;
-  return data;
 };
 
 export const getOfferApi = async (nftId: string, params: any) => {

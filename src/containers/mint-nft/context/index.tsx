@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApplicationContext } from "@/contexts/useApplication";
 import useMounted from "@/hooks/useMounted";
-import { getBanner } from "@/service/homepage";
 import { useEffect, useMemo, useState } from "react";
 import { createContext, useContext } from "react";
-import ventorians from "../../../json/ventorians.json";
-import dragarkelementnft from "../../../json/dragarkelementnft.json";
-import madape from "../../../json/madape.json";
+import collection_1 from "../../../json/collection_1.json";
+import collection_2 from "../../../json/collection_2.json";
+import collection_3 from "../../../json/collection_3.json";
 
 export const NFTContext = createContext([]);
 export const useContexts = () => useContext(NFTContext);
@@ -25,8 +24,7 @@ export const Provider = ({ children }: any) => {
 
   const getDataLaunchpad = async () => {
     try {
-      const allData = [ventorians, dragarkelementnft, madape];
-      // await getLaunchpad([]);
+      const allData = [collection_1, collection_2, collection_3];
       const all =
         allData?.filter(
           (x: any) => x.attributes.collectionStatus != "Completed"

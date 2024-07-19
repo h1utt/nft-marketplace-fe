@@ -9,7 +9,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
       <div
         className="js-countdown-single-timer flex w-full justify-evenly"
         data-countdown="2022-09-07T19:40:30"
-        data-expired="This auction has ended"
+        data-expired="Ended"
       >
         <span className="countdown-days flex items-end">
           <div className="">{days}</div>

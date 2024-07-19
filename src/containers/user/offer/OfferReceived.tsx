@@ -5,7 +5,7 @@ import cx from "classnames";
 import Image from "next/image";
 import {
   formatBalanceByChain,
-  formatWallet,
+  formatAddress,
   getCurrencyByChain,
 } from "@/utils";
 import { NumericFormat } from "react-number-format";
@@ -35,8 +35,8 @@ const OfferReceived = () => {
     setSelectedNft({
       collectionAddress: record?.collectionAddress,
       nftId: record?.nftAddress,
-      tokenUnit: record?.tokenUnit,
-      networkType: record?.networkType,
+      tokenUnit: 1,
+      networkType: 5,
       title: record?.nftTitle,
       imageUrl: record?.nftImageUrl,
       collectionName: record?.collectionName,
@@ -71,8 +71,8 @@ const OfferReceived = () => {
           ?.filter((item: any) => item?.offerList?.length > 0)
           .map((el: any) => {
             const getCurrency = getCurrencyByChain(
-              el?.networkType,
-              el?.tokenUnit
+              5,
+              1
             );
             return (
               <Panel
@@ -110,7 +110,7 @@ const OfferReceived = () => {
                             <NumericFormat
                               value={formatBalanceByChain(
                                 el?.offerList?.[0]?.price,
-                                el.networkType
+                                5
                               )}
                               displayType="text"
                               decimalScale={2}
@@ -149,7 +149,7 @@ const OfferReceived = () => {
                           <NumericFormat
                             value={formatBalanceByChain(
                               offer?.price,
-                              el.networkType
+                              5
                             )}
                             displayType="text"
                             decimalScale={2}
@@ -164,7 +164,7 @@ const OfferReceived = () => {
                             From{" "}
                             <Link href={`/user/${offer?.userAddress}`}>
                               <span className="text-white hover:underline">
-                                {formatWallet(offer?.userAddress)}
+                                {formatAddress(offer?.userAddress)}
                               </span>
                             </Link>
                           </div>{" "}

@@ -15,8 +15,6 @@ const HEADERS = {
   Authorization: getCookie() ? `Bearer ${getCookie()}` : undefined,
 };
 
-let refreshTokenRequest: any = null;
-
 const AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 300000,
@@ -58,18 +56,13 @@ async function refreshToken() {
 }
 
 export function refreshTokenFunc() {
-  // const { response, config } = error;
   return refreshToken()
     .then((response: any) => {
       const { data } = response;
-      // if (!data)
-      //     return Promise.reject(error)
       const accessToken = data.access_token;
       const refreshToken = data.refresh_token;
       const expireIn = data.expires_in || 86400;
-      //const config = response.config;
       if (accessToken && refreshToken) {
-        //save token
         setCookie(ACCESS_TOKEN, accessToken, cookieSetting);
         setCookie(REFRESH_TOKEN, refreshToken, cookieSetting);
       }

@@ -3,7 +3,6 @@ import { useVenom } from "@/contexts/useVenom";
 import useDebounce from "@/hooks/useDebounce";
 import { getActivityApi } from "@/service/activity";
 import {
-  addToWatchlistApi,
   getCollectionDetailApi,
   getNFTsByCollectionIdApi,
 } from "@/service/collection";
@@ -205,15 +204,6 @@ const CollectionDetailProvider = ({ children }: { children: any }) => {
     paramsSearch.maxRank,
   ]);
 
-  const handleAddToWatchlist = useCallback(async () => {
-    if (!isAuthenticated) {
-      login();
-      return;
-    }
-    const res = await addToWatchlistApi(router.query.id as string);
-    if (res.data) setRefreshState(uuidv4());
-  }, [isAuthenticated, router, login]);
-
   const value = useMemo(() => {
     const loadMoreNft = () => {
       setPagination({
@@ -243,7 +233,6 @@ const CollectionDetailProvider = ({ children }: { children: any }) => {
       loading,
       activity,
       onSelectTab,
-      handleAddToWatchlist,
       userNFT,
       getListNftWallet,
       collectionCMS,
@@ -259,7 +248,6 @@ const CollectionDetailProvider = ({ children }: { children: any }) => {
     activityStatus,
     loading,
     activity,
-    handleAddToWatchlist,
     userNFT,
     getListNftWallet,
     collectionCMS,

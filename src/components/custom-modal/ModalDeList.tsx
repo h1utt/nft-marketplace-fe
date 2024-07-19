@@ -1,19 +1,13 @@
 import IconVerified from "@/assets/icons/IconVerified";
-import { CHAIN_VALUES_ENUM } from "@/constants";
-import { useApplicationContext } from "@/contexts/useApplication";
-import useProviderSigner from "@/contexts/useProviderSigner";
-import { useVenom } from "@/contexts/useVenom";
-import { delay } from "@/helper/delay";
 import useStarknet from "@/hooks/useStarknet";
 import { formatBalanceByChain, getCurrencyByChain } from "@/utils";
-import { Address } from "everscale-inpage-provider";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { NumericFormat } from "react-number-format";
 import CustomModal from ".";
 import CustomImage from "../custom-image";
-import { delistNft } from "@/service/nft";
+import { useProvider } from "@starknet-react/core";
 
 interface IModalCancelNFT {
   open: boolean;
@@ -23,26 +17,18 @@ interface IModalCancelNFT {
 }
 const ModalCancelNFT = ({ open, onCancel, nft, manager }: IModalCancelNFT) => {
   const [loading, setLoading] = useState(false);
+  const { provider } = useProvider();
+  const { handleCancelListingStarknet } = useStarknet();
+  const getCurrency = useMemo(() => getCurrencyByChain(5, 1), [5, 1]);
 
-  const getCurrency = useMemo(
-    () => getCurrencyByChain(nft?.networkType, nft?.tokenUnit),
-    [nft?.networkType, nft?.tokenUnit]
-  );
-
-
-  const onCancelListingStarknetOffchain = async () => {
+  const onCancelListingStarknet = async () => {
     try {
       setLoading(true);
-      const res = await delistNft({
-        nftAddress: nft?.nftId,
-        tokenUnit: nft?.tokenUnit,
-      });
-      if (res?.data == true) {
-        toast.success("Delist successfully!");
+      let res = await handleCancelListingStarknet({ ...nft });
+      if (res.transaction_hash) {
+        await provider.waitForTransaction(res?.transaction_hash);
         setLoading(false);
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
+        toast.success("Cancel listing successfully!");
       }
     } catch (error: any) {
       setLoading(false);
@@ -53,10 +39,8 @@ const ModalCancelNFT = ({ open, onCancel, nft, manager }: IModalCancelNFT) => {
     }
   };
 
-
   const onCancelListing = async () => {
- await onCancelListingStarknetOffchain();
-
+    await onCancelListingStarknet();
   };
 
   return (
@@ -98,14 +82,10 @@ const ModalCancelNFT = ({ open, onCancel, nft, manager }: IModalCancelNFT) => {
               />
               <span className="text-sm">
                 <NumericFormat
-                  value={formatBalanceByChain(
-                    nft?.listingPrice || 0,
-                    nft?.networkType
-                  )}
+                  value={formatBalanceByChain(nft?.listingPrice || 0, 5)}
                   displayType="text"
                   thousandSeparator=","
                 />{" "}
-                {/* {getCurrency.currency} */}
               </span>
             </div>
           }

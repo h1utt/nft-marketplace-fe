@@ -1,4 +1,3 @@
-import Bar from "./progressBar";
 import Items_Countdown_timer from "../../components/items_countdown_timer";
 import { Button } from "antd";
 import { NumericFormat } from "react-number-format";
@@ -10,7 +9,6 @@ import useFunctionIDO from "./functionINO";
 import { useApplicationContext } from "@/contexts/useApplication";
 import { useMemo } from "react";
 import FormatPrice from "@/components/FormatPrice";
-import { CHAIN_VALUES } from "@/constants";
 
 const KeyHolder = () => {
   const {
@@ -25,10 +23,6 @@ const KeyHolder = () => {
     accNftData,
     mintedByPool,
     nftDataPoolSV,
-    discordVerify,
-    twitterVerifyPN,
-    retweetVerify,
-    ventoryVerify,
   }: any = useContexts();
 
   const { handleMintStarknet } = useFunctionIDO();
@@ -38,14 +32,13 @@ const KeyHolder = () => {
   const maxKeyHolderMint = attributes?.maxKeyHolderMint;
   const currentKeyHolderMint =
     Number(mintedByPool?.holder || nftDataPoolSV?.keyHolder || 0) <
-    maxKeyHolderMint
+      maxKeyHolderMint
       ? Number(mintedByPool?.holder || nftDataPoolSV?.keyHolder || 0)
       : maxKeyHolderMint;
 
   const keyHolderAccountLimit = accNftData[attributes?.code]?.isHolder
     ? attributes?.keyHolderAccountLimit
     : 0;
-  // const keyHolderAccountLimit = 100
   const currentAccountMint = accNftData[attributes?.code]?.keyHolder || 0;
 
   const keyHolderStartTime = attributes?.keyHolderStartTime;
@@ -76,9 +69,6 @@ const KeyHolder = () => {
               {Number(currentKeyHolderMint) >= Number(maxKeyHolderMint) && (
                 <span className="text-primary text-lg">SOLD OUT</span>
               )}
-            </div>
-            <div className="mt-4">
-              <Bar current={currentKeyHolderMint} max={maxKeyHolderMint} />
             </div>
             <div className="flex flex-row gap-3 rounded-2xl pt-3">
               <div className="flex flex-col bg-layer-2 basis-[33.33%] p-2 py-[1rem] rounded-lg items-center">
@@ -176,50 +166,16 @@ const KeyHolder = () => {
               isDateGreater(new Date(), new Date(keyHolderStartTime)) && (
                 <div>
                   <div className="flex items-center justify-evenly pt-3 text-white">
-                    {!!account &&
-                      rightChain &&
-                      currentKeyHolderMint < maxKeyHolderMint &&
-                      (currentAccountMint < keyHolderAccountLimit ? (
-                        <Button
-                          loading={loadingHD}
-                          onClick={() => !loadingHD && mintNFT("keyHolder")}
-                          className="btn-primary w-full"
-                          disabled={
-                            !(
-                              (discordVerify ||
-                                attributes?.enableDiscordFollowsCheck !=
-                                  true) &&
-                              (twitterVerifyPN ||
-                                attributes?.enableFollowsCheck != true) &&
-                              (retweetVerify ||
-                                attributes?.enableRetweetCheck != true) &&
-                              (ventoryVerify ||
-                                attributes?.enableVentoryFollowsCheck != true)
-                            )
-                          }
-                        >
-                          {(discordVerify ||
-                            attributes?.enableDiscordFollowsCheck != true) &&
-                          (twitterVerifyPN ||
-                            attributes?.enableFollowsCheck != true) &&
-                          (retweetVerify ||
-                            attributes?.enableRetweetCheck != true) &&
-                          (ventoryVerify ||
-                            attributes?.enableVentoryFollowsCheck != true)
-                            ? `Mint NFT (${currentAccountMint}/${
-                                Number(keyHolderAccountLimit) > 1000000
-                                  ? "∞"
-                                  : keyHolderAccountLimit
-                              })`
-                            : "Do the task below to mint NFT"}
-                        </Button>
-                      ) : (
-                        <span className="text-primary text-lg">
-                          {keyHolderAccountLimit == 0
-                            ? `You are not eligible!`
-                            : "You have reached max NFT"}
-                        </span>
-                      ))}
+                    {!!account && rightChain && (
+                      <Button
+                        loading={loadingHD}
+                        onClick={() => !loadingHD && mintNFT("keyHolder")}
+                        className="btn-primary w-full"
+                      >
+                        {`Mint NFT (${currentAccountMint}/${"∞"
+                          })`}
+                      </Button>
+                    )}
                     {(!account || !rightChain) && (
                       <Button
                         onClick={onShowDrawerConnectWallet}

@@ -10,7 +10,7 @@ export const STATUS_FILTER = [
     value: "buy-now,not-for-sale",
   },
   {
-    name: "Buy now",
+    name: "Buy Now",
     value: "buy-now",
   },
   {
